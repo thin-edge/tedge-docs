@@ -1,15 +1,21 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
+const fs = require('fs');
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+
+const docsDir = process.env.DOCS_DIR || 'docs';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Thin-edge',
   tagline: 'The open edge framework for lightweight IoT devices',
   favicon: 'img/favicon.ico',
-
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
   // Set the production url of your site here
   url: 'https://thin-edge.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -40,6 +46,9 @@ const config = {
         docs: {
           routeBasePath: '/', // Serve the docs at the site's root
           sidebarPath: require.resolve('./sidebars.js'),
+          // Resolve the symlink to prevent any webpack caching problems
+          // https://github.com/facebook/docusaurus/issues/3272#issuecomment-879295056
+          path: fs.realpathSync(docsDir),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           //editUrl:
@@ -52,7 +61,20 @@ const config = {
       }),
     ],
   ],
-
+  plugins: [
+    // function (context, options) {
+    //   return {
+    //     name: 'webpack-configuration-plugin',
+    //     configureWebpack(config, isServer, utils) {
+    //       return {
+    //         resolve: {
+    //           symlinks: false,
+    //         }
+    //       };
+    //     }
+    //   };
+    // },
+  ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({

@@ -1,9 +1,12 @@
 FROM node:18-alpine
 
-COPY . .
-
-RUN yarn install
-RUN npm install -g npm@9.6.7
-
 WORKDIR /docusaurus/tedge
+COPY package*.json yarn.lock ./
+RUN yarn install
+
 EXPOSE 3000
+
+VOLUME [ "/docusaurus/tedge/site/docs" ]
+VOLUME [ "/docusaurus/tedge/site" ]
+
+CMD ["yarn", "run", "start"]
