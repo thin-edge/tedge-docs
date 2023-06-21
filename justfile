@@ -34,10 +34,13 @@ build-container *ARGS='':
 # Example 2: Start a shell inside the container where you can call the docusaurus commands manually
 # $ just docs-container sh
 #
-docs-container *ARGS='yarn run start-docker': clean build-container
+# Example 3: Build then serve the production docs (e.g. not the development server)
+# $ just docs-container yarn build
+# $ just docs-container yarn serve
+docs-container *ARGS='yarn start': build-container
+    mkdir -p build
     docker run --rm -it \
-        --mount "type=bind,src=$PWD/../thin-edge.io/docs/src,target=/docusaurus/tedge/site/docs" \
-        --mount "type=bind,src=$PWD,target=/docusaurus/tedge/site" \
-        --env "DOCS_DIR=/docusaurus/tedge/site/docs" \
+        --mount "type=bind,src=$PWD/../thin-edge.io/docs/src,target=/docusaurus/docs" \
+        --mount "type=bind,src=$PWD/build,target=/docusaurus/build" \
         -p 127.0.0.1:3000:3000/tcp \
         docusaurus {{ARGS}}

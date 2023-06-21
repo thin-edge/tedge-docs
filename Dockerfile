@@ -1,12 +1,9 @@
 FROM node:18-alpine
-
-WORKDIR /docusaurus/tedge
+WORKDIR /docusaurus
 COPY package*.json yarn.lock ./
 RUN yarn install
-
 EXPOSE 3000
-
-VOLUME [ "/docusaurus/tedge/site/docs" ]
-VOLUME [ "/docusaurus/tedge/site" ]
-
+ENV DOCUSAURUS_OPTIONS="--host=0.0.0.0"
+COPY . .
+VOLUME [ "/docusaurus/docs" ]
 CMD ["yarn", "run", "start"]
