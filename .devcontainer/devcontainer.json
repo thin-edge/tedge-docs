@@ -1,0 +1,20 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
+{
+	"name": "tedge-docs",
+	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-20",
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+		"ghcr.io/guiyomh/features/just:0": {}
+	},
+    "containerEnv": {
+        "DOCUSAURUS_OPTIONS": "--host=0.0.0.0"
+    },
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [3000],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "just install"
+}
