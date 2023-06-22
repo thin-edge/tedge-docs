@@ -9,34 +9,69 @@ The documentation source files are stored in the [main thin-edge.io](https://git
 __Warning__ This is a work in progress.
 Currently you have to check out the documentation from [this PR](https://github.com/thin-edge/thin-edge.io/pull/2003)
 
-## Build the docs
+## Running docs in development
 
-Clone this repository along a clone of the main thin-edge repository.
-The latter provides the doc contents, the former the tools.
+The instructions below detail how to build and serve the documentation.
 
+1. Clone the project and change directory to the project
+
+    ```sh
+    git clone https://github.com/thin-edge/tedge-docs
+    cd tedge-docs
+    ```
+
+2. Checkout the thin-edge.io source markdown files
+
+    ```sh
+    just init
+    ```
+
+    You can also checkout a fork instead (rather than the main project)by providing the git url of the fork as the first positional argument.
+
+    ```sh
+    just init https://github.com/myuser/thin-edge.io.git
+    ```
+
+3. Start the documentation (using a local dev server)
+
+    ```sh
+    just docs
+    ```
+
+    Alternatively you can start the doc
+
+    ```sh
+    just docs-container
+    ```
+
+    **Note**
+
+    * The thin-edge.io repo be cloned automatically in a sibling folder (on the same level as the `tedge-docs` project)
+
+4. You can now edit the thin-edge.io documents under the `docs/src` folder of the `thin-edge.io` repository. Any changes will be detected and the browser page will be refreshed automatically.
+
+## Building the docs
+
+Assuming you have done the initial project setup in the [running docs in development](./README.md#running-docs-in-development) section, then you can build the production files using the following steps:
+
+These instructions will produce a static web-site in the `build/` folder at the root project directory.
+
+### Natively (if you have nodejs installed on your machine/dev container)
+
+```sh
+just build
 ```
-$ git clone https://github.com/thin-edge/tedge-docs
-$ git clone https://github.com/thin-edge/thin-edge.io
+
+Then verify the result by serving the files:
+
+### Container
+
+```sh
+just docs-container yarn build
 ```
 
-Build the docker container
+Then verify the result by serving the files:
 
+```sh
+just docs-container yarn serve
 ```
-$ cd tedge-docs
-$ docker build -t docusaurus .
-```
-
-Run the docusaurus container.
-Note how both this repo and the main tedge repo are made available to docusaurus,
-the docs src directory being injected into the docusaurus tree.
-
-```
-$ docker run --rm -it \
-  --mount "type=bind,src=$PWD/docusaurus,target=/docusaurus" \
-  --mount "type=bind,src=$PWD/../thin-edge.io/docs/src,target=/docusaurus/tedge/docs" \
-  -p 127.0.0.1:3000:3000/tcp \
-  docusaurus sh
-```
-
-The static web-site is then available in `docusaurus/tedge/build`.
-
