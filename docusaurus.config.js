@@ -117,6 +117,10 @@ const config = {
                 href: 'https://github.com/thin-edge/thin-edge.io',
               },
               {
+                label: 'YouTube',
+                href: 'https://www.youtube.com/@thin_edge_io/featured',
+              },
+              {
                 label: 'Twitter',
                 href: 'https://twitter.com/thin_edge_io',
               },
@@ -125,6 +129,12 @@ const config = {
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Software AG.`,
       },
+      metadata: [
+        {
+          name: 'keywords',
+          content: 'iot, edge, cumulocity-iot, azure-iot, aws-iot, iot-devices',
+        },
+      ],
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
