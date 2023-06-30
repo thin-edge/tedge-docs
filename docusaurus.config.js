@@ -117,6 +117,10 @@ const config = {
                 href: 'https://github.com/thin-edge/thin-edge.io',
               },
               {
+                label: 'YouTube',
+                href: 'https://www.youtube.com/@thin_edge_io/featured',
+              },
+              {
                 label: 'Twitter',
                 href: 'https://twitter.com/thin_edge_io',
               },
