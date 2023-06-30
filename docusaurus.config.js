@@ -54,10 +54,11 @@ const config = {
           path: fs.realpathSync(docsDir),
           // Should the unreleased docs be published
           includeCurrentVersion: includeCurrentVersion === "true",
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          //editUrl:
-           // 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // Enable "edit this page" links for only the current/next version
+          editUrl: ({
+            version,
+            docPath,
+          }) => version == 'current' ? `https://github.com/thin-edge/thin-edge.io/edit/main/docs/src/${docPath}` : undefined,
         },
         blog: false, // Optional: disable the blog plugin
         theme: {
