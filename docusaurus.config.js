@@ -128,6 +128,12 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        additionalLanguages: [
+          'bash',
+          'log',
+          'toml',
+          'python',
+        ],
       },
     }),
 };
