@@ -24,12 +24,15 @@ The instructions below detail how to build and serve the documentation.
 
     ```sh
     just init
+
+    # Optional (if you want to include the last official docs as well)
+    just checkout-version
     ```
 
     You can also checkout a fork instead (rather than the main project)by providing the git url of the fork as the first positional argument.
 
     ```sh
-    just init https://github.com/myuser/thin-edge.io.git
+    just project=https://github.com/myuser/thin-edge.io.git init
     ```
 
 3. Start the documentation (using a local dev server)
