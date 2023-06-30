@@ -90,7 +90,8 @@ const config = {
         items: [
           {
             href: 'https://github.com/thin-edge/thin-edge.io',
-            label: 'GitHub',
+            className: "header-github-link",
+            'aria-label': "GitHub repository",
             position: 'right',
           },
         ],
