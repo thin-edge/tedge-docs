@@ -125,6 +125,12 @@ const config = {
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Software AG.`,
       },
+      metadata: [
+        {
+          name: 'keywords',
+          content: 'iot, edge, cumulocity-iot, azure-iot, aws-iot, iot-devices',
+        },
+      ],
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
