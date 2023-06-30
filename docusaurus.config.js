@@ -8,6 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const docsDir = process.env.DOCS_DIR || 'docs';
 const domain = process.env.DOMAIN || 'https://thin-edge.github.io';
 const baseUrl = process.env.BASE_URL || '/';
+const includeCurrentVersion = process.env.INCLUDE_CURRENT_VERSION || 'true';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -51,6 +52,8 @@ const config = {
           // Resolve the symlink to prevent any webpack caching problems
           // https://github.com/facebook/docusaurus/issues/3272#issuecomment-879295056
           path: fs.realpathSync(docsDir),
+          // Should the unreleased docs be published
+          includeCurrentVersion: includeCurrentVersion === "true",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           //editUrl:
@@ -88,6 +91,12 @@ const config = {
           src: 'img/thin-edge-logo.svg',
         },
         items: [
+          {
+            type: 'docsVersionDropdown',
+            position: 'right',
+            dropdownItemsAfter: [],
+            dropdownActiveClassDisabled: true,
+          },
           {
             href: 'https://github.com/thin-edge/thin-edge.io',
             className: "header-github-link",
