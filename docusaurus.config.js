@@ -6,6 +6,8 @@ const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 const docsDir = process.env.DOCS_DIR || 'docs';
+const domain = process.env.DOMAIN || 'https://thin-edge.github.io';
+const baseUrl = process.env.BASE_URL || '/';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -17,10 +19,10 @@ const config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
   // Set the production url of your site here
-  url: 'https://thin-edge.github.io',
+  url: domain,
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
