@@ -5,6 +5,7 @@ const fs = require('fs');
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const remarkCmdRun = require('./src/remark/cmd-run');
+const remarkMqttCodeBlock = require('./src/remark/mqtt-codeblock');
 
 const docsDir = process.env.DOCS_DIR || 'docs';
 const domain = process.env.DOMAIN || 'https://thin-edge.github.io';
@@ -62,6 +63,15 @@ const config = {
           }) => version == 'current' ? `https://github.com/thin-edge/thin-edge.io/edit/main/docs/src/${docPath}` : undefined,
           beforeDefaultRemarkPlugins: [
             [remarkCmdRun, {showErrors: true, strict: false}],
+          ],
+          remarkPlugins: [
+            [
+              remarkMqttCodeBlock,
+              {
+                sync: true,
+                converters: ['tedge', 'mosquitto', 'mqtt'],
+              }
+            ],
           ],
         },
         blog: false, // Optional: disable the blog plugin
