@@ -14,6 +14,8 @@ function parseTedgeCommand(code) {
     payload: '',
     retain: '',
     qos: '',
+    // Preserve any additional arguments
+    remainingArgs: '',
   };
 
   args = parse(code);
@@ -23,13 +25,20 @@ function parseTedgeCommand(code) {
   while (i < args.length) {
     if (args[i] == '-r' || args[i] == '--retain') {
       api.retain = true;
+    } else if (args[i] == '--no-topic') {
+      // Ignore tedge mqtt sub specific argument
     } else if (args[i] == '-q' || args[i] == '--qos') {
       i++;
       if (i < args.length) {
         api.qos = args[i];
       }
     } else {
-      positionalArgs.push(args[i]);
+      if (typeof args[i] === 'string') {
+        positionalArgs.push(args[i]);
+      } else {
+        // shell operator (e.g. > or ||) are stored as an object
+        positionalArgs.push(args[i].op);
+      }
     }
     i++
   }
@@ -37,18 +46,21 @@ function parseTedgeCommand(code) {
   if (code.startsWith('tedge mqtt sub')) {
     api.action = MQTT_SUB;
     if (positionalArgs.length > 0) {
-      api.topic = positionalArgs[0];
+      api.topic = positionalArgs.shift();
     }
   } else if (code.startsWith('tedge mqtt pub')) {
     api.action = MQTT_PUB;
     if (positionalArgs.length > 0) {
-      api.topic = positionalArgs[0];
+      api.topic = positionalArgs.shift();
     }
-    if (positionalArgs.length > 1) {
-      api.payload = positionalArgs[1];
+    if (positionalArgs.length > 0) {
+      api.payload = positionalArgs.shift();
     }
   } else {
     api.action = '';
+  }
+  if (positionalArgs.length > 0) {
+    api.remainingArgs = positionalArgs.join(' ');
   }
   return api;
 }
@@ -76,6 +88,9 @@ function toMosquittoPubCli(options) {
       command.push('-q', options.qos);
   }
   command.push('-t', `'${options.topic}'`, '-m', `'${options.payload}'`);
+  if (options.remainingArgs) {
+    command.push(options.remainingArgs);
+  }
   return command.join(' ');
 }
 
@@ -84,6 +99,9 @@ function toMosquittoSubCli(options) {
       'mosquitto_sub',
       '-t', `'${options.topic}'`,
   ];
+  if (options.remainingArgs) {
+    command.push(options.remainingArgs);
+  }
   return command.join(' ');
 }
 
