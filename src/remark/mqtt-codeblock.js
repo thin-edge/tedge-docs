@@ -39,14 +39,14 @@ function createCodeExample(code, converter) {
         {
           type: 'code',
           lang: 'sh',
-          meta: `title="Publish topic : ${title.join(' ')}"`,
+          meta: title.length > 0 ? `title="Publish topic: ${title.join(', ')}"` : `title="Publish topic"`,
           value: prettify(api.topic),
         },
         {
           type: 'code',
           lang: 'sh',
           meta: `title="Payload"`,
-          value: prettify(api.payload),
+          value: prettify(api.payload || '<<empty>>'),
         }
       ];
     }
@@ -54,8 +54,8 @@ function createCodeExample(code, converter) {
       {
         type: 'code',
         lang: 'sh',
-        meta: `title="Subscribe: ${api.topic}   retain=${api.retain}"`,
-        value: prettify(api.payload),
+        meta: `title="Subscribe: topic"`,
+        value: prettify(api.topic),
       }
     ];
   }
