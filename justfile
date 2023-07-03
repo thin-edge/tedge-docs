@@ -56,6 +56,10 @@ docs: install
 build: install
     yarn build
 
+# Serve production docs
+serve:
+    yarn run serve
+
 # Build the container image to run docusaurus
 build-container *ARGS='':
     docker build {{ARGS}} -t docusaurus .
