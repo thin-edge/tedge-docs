@@ -6,11 +6,6 @@ node_modules
 
 /docs
 
-# Ignore versioned files as they are not commited as part of the project (only during build time)
-/versioned_docs/
-/versioned_sidebars/
-/versions.json
-
 # Generated files
 .docusaurus
 .cache-loader
