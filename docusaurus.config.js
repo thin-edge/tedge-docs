@@ -83,6 +83,13 @@ const config = {
   ],
   plugins: [
     'plugin-image-zoom',
+    [
+      require.resolve("@cmfcmf/docusaurus-search-local"),
+      {
+        indexDocs: true,
+        indexBlog: false,
+      }
+    ]
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
