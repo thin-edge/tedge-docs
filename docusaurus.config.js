@@ -89,7 +89,27 @@ const config = {
         indexDocs: true,
         indexBlog: false,
       }
-    ]
+    ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            to: '/',
+            from: ['/html/'],
+          },
+        ],
+        createRedirects(existingPath) {
+          if (existingPath.includes('/html/')) {
+            // Redirect from /html/team/X to /docs
+            return [
+              existingPath.replace('/html/', '/'),
+            ];
+          }
+          return undefined; // Return a falsy value: no redirect created
+        },
+      },
+    ],
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
