@@ -87,6 +87,7 @@ const config = {
                 converters: ['tedge', 'mosquitto', 'mqtt'],
               }
             ],
+            require('docusaurus-remark-plugin-tab-blocks'),
           ],
         },
         blog: false, // Optional: disable the blog plugin
