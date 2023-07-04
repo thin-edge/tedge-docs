@@ -42,7 +42,10 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-
+  clientModules: [
+    // Prevent chrome warnings: Consider marking event handler as 'passive' to make the page more responsive
+    require.resolve('default-passive-events'),
+  ],
   presets: [
     [
       'classic',
