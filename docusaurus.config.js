@@ -46,6 +46,18 @@ const config = {
     // Prevent chrome warnings: Consider marking event handler as 'passive' to make the page more responsive
     require.resolve('default-passive-events'),
   ],
+  headTags: [
+    // Add permissions-policy to prevent chrome warnings
+    // Example: Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'interest-cohort'.
+    // https://github.com/orgs/community/discussions/52356
+    {
+      tagName: 'meta',
+      attributes: {
+        'http-equiv': 'Permissions-Policy',
+        content: 'interest-cohort=()',
+      },
+    },
+  ],
   presets: [
     [
       'classic',
@@ -169,13 +181,6 @@ const config = {
         {
           name: 'keywords',
           content: 'iot, edge, cumulocity-iot, azure-iot, aws-iot, iot-devices',
-        },
-        // Add permissions-policy to prevent chrome warnings
-        // Example: Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'interest-cohort'.
-        // https://github.com/orgs/community/discussions/52356
-        {
-          'http-equiv': 'Permissions-Policy',
-          content: 'interest-cohort=()',
         },
       ],
       prism: {
