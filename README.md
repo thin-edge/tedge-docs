@@ -6,8 +6,7 @@ for generating the documentation of [thin-edge](https://github.com/thin-edge/thi
 
 The documentation source files are stored in the [main thin-edge.io](https://github.com/thin-edge/thin-edge.io/tree/main/docs/src) repository.
 
-__Warning__ This is a work in progress.
-Currently you have to check out the documentation from [this PR](https://github.com/thin-edge/thin-edge.io/pull/2003)
+Check out the [online documentation](https://thin-edge.github.io/thin-edge.io) to see how the docs looked when published by Docusaurus.
 
 ## Running docs in development
 
@@ -52,6 +51,18 @@ The instructions below detail how to build and serve the documentation.
     * The thin-edge.io repo be cloned automatically in a sibling folder (on the same level as the `tedge-docs` project)
 
 4. You can now edit the thin-edge.io documents under the `docs/src` folder of the `thin-edge.io` repository. Any changes will be detected and the browser page will be refreshed automatically.
+
+## Checkout a branch and treat it as a specific version
+
+To support use-cases where the documentation has been fixed after a tag has been created, the following command allows you to checkout a specific branch and treat it like the given version.
+
+The following will checkout the `main` branch and treat it as the `0.11.0` version.
+
+```sh
+just checkout-version 0.11.0 main
+```
+
+Once you have done this, then you can commit the files to the project.
 
 ## Building the docs
 
