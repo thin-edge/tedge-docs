@@ -120,6 +120,9 @@ const config = {
         logo: {
           alt: 'thin-edge.io',
           src: 'img/thin-edge-logo.svg',
+          // Use separate dark-mode logo as is more cross compatible
+          // in different browsers (chrome and safari)
+          srcDark: 'img/thin-edge-logo-dark.svg',
         },
         items: [
           {
