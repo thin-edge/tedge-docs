@@ -41,6 +41,11 @@ const plugin = (options) => {
       try {
         const output = execSync(meta.command, {
           timeout: 2000,
+          stdio: [
+            'ignore', // stdin
+            'pipe', // stdout
+            'ignore', // stderr
+          ],
         });
 
         node.value = output.toString('utf8').trimEnd();
@@ -49,10 +54,12 @@ const plugin = (options) => {
         node.meta = metaUtils.toString(meta, ['command', 'lang']);
         node.lang = meta.lang || '';
       } catch (error) {
-        console.warn('Failed to run command', {
-          meta,
-          error,
-        });
+        if (options.logErrors) {
+          console.warn('Failed to run command', {
+            meta,
+            error: `${error}`,
+          });
+        }
 
         if (options.showErrors) {
           node.value = `${error}`.trimEnd();

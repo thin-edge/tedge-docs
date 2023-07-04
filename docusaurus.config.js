@@ -65,7 +65,7 @@ const config = {
             docPath,
           }) => version == 'current' ? `https://github.com/thin-edge/thin-edge.io/edit/main/docs/src/${docPath}` : undefined,
           beforeDefaultRemarkPlugins: [
-            [remarkCmdRun, {showErrors: false, strict: false}],
+            [remarkCmdRun, {showErrors: false, strict: false, logErrors: false}],
           ],
           remarkPlugins: [
             [
