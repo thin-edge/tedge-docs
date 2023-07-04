@@ -52,6 +52,18 @@ The instructions below detail how to build and serve the documentation.
 
 4. You can now edit the thin-edge.io documents under the `docs/src` folder of the `thin-edge.io` repository. Any changes will be detected and the browser page will be refreshed automatically.
 
+## Checkout a branch and treat it as a specific version
+
+To support use-cases where the documentation has been fixed after a tag has been created, the following command allows you to checkout a specific branch and treat it like the given version.
+
+The following will checkout the `main` branch and treat it as the `0.11.0` version.
+
+```sh
+just checkout-version 0.11.0 main
+```
+
+Once you have done this, then you can commit the files to the project.
+
 ## Building the docs
 
 Assuming you have done the initial project setup in the [running docs in development](./README.md#running-docs-in-development) section, then you can build the production files using the following steps:
