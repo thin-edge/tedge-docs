@@ -32,7 +32,7 @@ const metaUtils = require('./meta');
 const plugin = (options) => {
   const transformer = async (ast) => {
     visit(ast, 'code', (node) => {
-      if (node.lang != 'run' || !node.value) return;
+      if (node.lang != 'run') return;
 
       const meta = metaUtils.fromString(node.meta || '');
       if (!meta.command) return;
