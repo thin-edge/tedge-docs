@@ -6,8 +6,7 @@ for generating the documentation of [thin-edge](https://github.com/thin-edge/thi
 
 The documentation source files are stored in the [main thin-edge.io](https://github.com/thin-edge/thin-edge.io/tree/main/docs/src) repository.
 
-__Warning__ This is a work in progress.
-Currently you have to check out the documentation from [this PR](https://github.com/thin-edge/thin-edge.io/pull/2003)
+Check out the [online documentation](https://thin-edge.github.io/thin-edge.io) to see how the docs looked when published by Docusaurus.
 
 ## Running docs in development
 
