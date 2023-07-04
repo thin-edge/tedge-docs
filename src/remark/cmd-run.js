@@ -8,14 +8,14 @@
 
   The following markdown will get converted from:
 
-  ```run title="List items in a directory" command="ls -l" lang="sh"
+  ```text title="List items in a directory" command="ls -l"
   total 1
   -rw-r--r--@   1 tedge  staff     209 Jun 22 11:13 Dockerfile
   ```
 
   to:
 
-  ```sh title="List items in a directory"
+  ```text title="List items in a directory"
   total 3
   -rw-r--r--@   1 tedge  staff     209 Jun 22 11:13 Dockerfile
   -rw-r--r--    1 tedge  staff    2290 Jun 30 22:45 README.md
@@ -30,12 +30,16 @@ const visit = require('unist-util-visit');
 const metaUtils = require('./meta');
 
 const plugin = (options) => {
+  const defaultLang = 'text';
   const transformer = async (ast) => {
     visit(ast, 'code', (node) => {
-      if (node.lang != 'run') return;
-
       const meta = metaUtils.fromString(node.meta || '');
       if (!meta.command) return;
+
+      // set defaults
+      if (!meta.title) {
+        meta.title = "Output";
+      }
 
       // execute command and use the result in the code block
       try {
@@ -52,7 +56,12 @@ const plugin = (options) => {
 
         // remove meta info related to this plugin
         node.meta = metaUtils.toString(meta, ['command', 'lang']);
-        node.lang = meta.lang || '';
+
+        if (node.lang == 'code') {
+          node.lang = meta.lang || defaultLang;
+        } else {
+          node.lang = node.lang || meta.lang || defaultLang;
+        }
       } catch (error) {
         if (options.logErrors) {
           console.warn('Failed to run command', {
