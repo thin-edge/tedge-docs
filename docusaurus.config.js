@@ -100,13 +100,6 @@ const config = {
   plugins: [
     'plugin-image-zoom',
     [
-      require.resolve("@cmfcmf/docusaurus-search-local"),
-      {
-        indexDocs: true,
-        indexBlog: false,
-      }
-    ],
-    [
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
@@ -193,6 +186,13 @@ const config = {
           'toml',
           'python',
         ],
+      },
+      algolia: {
+        appId: 'VJGN4W1RS0',
+        apiKey: '090e96d679061a08763f67008de705c6',
+        indexName: 'thin-edge-io',
+        contextualSearch: true,
+        searchParameters: {},
       },
     }),
 };
