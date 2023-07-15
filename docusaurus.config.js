@@ -187,6 +187,7 @@ const config = {
         darkTheme: darkCodeTheme,
         additionalLanguages: [
           'bash',
+          'json5',
           'log',
           'toml',
           'python',
