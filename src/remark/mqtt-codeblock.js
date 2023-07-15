@@ -15,7 +15,7 @@ const importNodes = [
   },
 ];
 
-function createCodeExample(code, converter, format='legacy') {
+function createCodeExample(code, converter, format='legacy', title='') {
   const api = parseTedgeCommand(code, format, false);
 
   if (converter === 'mosquitto') {
@@ -23,7 +23,7 @@ function createCodeExample(code, converter, format='legacy') {
       {
         type: 'code',
         lang: 'sh',
-        meta: '',
+        meta: title ? `title="${title}"` : ``,
         value: convertToMosquitto(api),
       }
     ];
@@ -67,13 +67,13 @@ function createCodeExample(code, converter, format='legacy') {
     {
       type: 'code',
       lang: 'sh',
-      meta: '',
+      meta: title ? `title="${title}"` : ``,
       value: convertToTedgeCLI(api),
     }
   ];
 }
 
-function collectCodeNodes(code, converters = [], formats = []) {
+function collectCodeNodes(code, converters = [], formats = [], groupTabs = false) {
   const tabNodes = [];
 
   if (formats.length == 0) {
@@ -87,11 +87,36 @@ function collectCodeNodes(code, converters = [], formats = []) {
     return name;
   };
 
-  formats.forEach(format => {
-    converters.forEach(converter => {
-      const nodes = createCodeExample(code, converter, format);
-      tabNodes.push([nodes, { label: formatLabel(converter, format), value: converter }]);
+  if (formats.length == 1 || !groupTabs) {
+    // Option 1: Each convert and format are on separate tabs
+    formats.forEach(format => {
+      converters.forEach(converter => {
+        const nodes = createCodeExample(code, converter, format);
+        tabNodes.push([nodes, { label: formatLabel(converter, format), value: converter }]);
+      });
     });
+    return tabNodes;
+  }
+
+  // Option 2: Group the different formats of the same convert within the same tab
+  // e.g. the 'mosquitto' tab will show both the legacy and new api examples
+  converters.forEach(converter => {
+    const nodes = [];
+    formats.forEach(format => {
+
+      // Special case for mqtt, the code block title is already used
+      // so it needs an overall header
+      if (converter == 'mqtt') {
+        nodes.push({
+          type: "jsx",
+          value: `<p>API version: ${format}</p>`,
+        });
+      }
+
+      // Add code
+      nodes.push(...createCodeExample(code, converter, format, title=`API version: ${format}`));
+    })
+    tabNodes.push([nodes, { label: converter, value: converter }]);
   });
   return tabNodes;
 }
@@ -129,7 +154,7 @@ function formatTabs(tabNodes, { groupId, labels, sync }) {
 }
 
 const plugin = (options = {}) => {
-  const { sync = true, groupId = 'te2mqtt', converters = ['tedge', 'mosquitto', 'mqtt'], formats = ['legacy', 'v1'] } = options;
+  const { sync = true, groupId = 'te2mqtt', converters = ['tedge', 'mosquitto', 'mqtt'], formats = ['legacy', 'v1'], groupTabs = false } = options;
   return (root) => {
     let transformed = false;
     let includesImportTabs = false;
@@ -141,7 +166,9 @@ const plugin = (options = {}) => {
       }
 
       if (is(node, 'code') && `${node.meta}`.includes('te2mqtt')) {
-        const codeOptions = metaUtils.fromString(node.meta);
+        const codeOptions = metaUtils.fromString(node.meta, {
+          groupTabs,
+        });
 
         let instanceFormats = formats;
         if (node.meta != 'te2mqtt') {
@@ -151,7 +178,7 @@ const plugin = (options = {}) => {
         }
 
         const code = node.value;
-        const codeBlocks = collectCodeNodes(code, converters, instanceFormats);
+        const codeBlocks = collectCodeNodes(code, converters, instanceFormats, codeOptions.groupTabs);
         const tabs = formatTabs(codeBlocks, {
           sync,
           groupId,

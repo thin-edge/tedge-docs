@@ -86,6 +86,10 @@ const config = {
                 sync: true,
                 converters: ['tedge', 'mosquitto', 'mqtt'],
                 formats: ['legacy'],
+                // Group the formats together in the same tabs
+                // e.g. if using 'v1' and 'legacy' formats, both will appear under the 'tedge'
+                // table if grouping is enabled
+                groupTabs: true,
                 // Enable both v1 and legacy examples in code blocks
                 // formats: ['v1', 'legacy'],
               }
