@@ -85,6 +85,9 @@ const config = {
               {
                 sync: true,
                 converters: ['tedge', 'mosquitto', 'mqtt'],
+                formats: ['legacy'],
+                // Enable both v1 and legacy examples in code blocks
+                // formats: ['v1', 'legacy'],
               }
             ],
             require('docusaurus-remark-plugin-tab-blocks'),

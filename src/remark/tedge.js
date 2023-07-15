@@ -7,7 +7,7 @@ const parse = require('shell-quote/parse');
 const MQTT_PUB = 'pub';
 const MQTT_SUB = 'sub';
 
-function parseTedgeCommand(code) {
+function parseTedgeCommand(code, format='legacy', debug=false) {
   const api = {
     action: MQTT_PUB,
     topic: '',
@@ -62,14 +62,27 @@ function parseTedgeCommand(code) {
   if (positionalArgs.length > 0) {
     api.remainingArgs = positionalArgs.join(' ');
   }
+
+  // Convert tedge message format 
+  const convertedApi = convertTedgeMessageFormat(api.topic, api.payload, format);
+
+  if (debug) {
+    console.log('Converted api', {
+      api,
+      convertedApi,
+      format,
+    });
+  }
+
+  api.topic = convertedApi.topic;
+  api.payload = convertedApi.payload;
   return api;
 }
 
 /*
 Convert a tedge mqtt sub|pub command to the equivalent mosquitto command
 */
-function convertToMosquitto(code) {
-  const api = parseTedgeCommand(code);
+function convertToMosquitto(api) {
   if (api.action == MQTT_SUB) {
       return toMosquittoSubCli(api);
   }
@@ -105,18 +118,141 @@ function toMosquittoSubCli(options) {
   return command.join(' ');
 }
 
+/*
+  Tedge CLI
+*/
+function convertToTedgeCLI(api) {
+  if (api.action == MQTT_SUB) {
+      return toTedgeSubCli(api);
+  }
+  return toTedgePubCli(api);
+}
+
+function toTedgePubCli(options) {
+  const command = [
+      'tedge',
+      'mqtt',
+      'pub',
+  ];
+
+  if (options.retain) {
+      command.push('-r');
+  }
+  if (options.qos) {
+      command.push('-q', options.qos);
+  }
+  command.push(`'${options.topic}'`, `'${options.payload}'`);
+  if (options.remainingArgs) {
+    command.push(options.remainingArgs);
+  }
+  return command.join(' ');
+}
+
+function toTedgeSubCli(options) {
+  const command = [
+      'tedge',
+      'mqtt',
+      'sub',
+      `'${options.topic}'`,
+  ];
+  if (options.remainingArgs) {
+    command.push(options.remainingArgs);
+  }
+  return command.join(' ');
+}
+
 function prettify(payload) {
   try {
-    const jsonText = JSON.parse(payload);
-    return JSON.stringify(jsonText, null, '  ');
+    const obj = typeof payload === 'string' ? JSON.parse(payload) : payload;
+    return JSON.stringify(obj, null, '  ');
   } catch (e) {
     // don't error on non-json body, just return it as is
     return payload;
   }
 }
 
+function convertLegacyToNewAPI(topic, payload) {
+  const segments = topic.split("/");
+
+  let outTopic = topic;
+  let outPayload = {};
+  if (payload && typeof payload === "string") {
+    try {
+      outPayload = JSON.parse(payload);
+    } catch (e) {
+      // ignore error
+      console.log(`Could not parse json. value=${payload}, error=${e}`);
+    }
+  }
+
+  if (segments[1] == "measurements") {
+    if (segments.length == 2) {
+      // main device
+      outTopic = ["te", "device", "main", "", "", "m", "ThinEdgeMeasurement"].join("/");
+    } else {
+      // child device
+      outTopic = ["te", "device", segments[2], "", "", "m", "ThinEdgeMeasurement"].join("/");
+    }
+  } else if (segments[1] == "events") {
+    if (segments.length == 3) {
+      // main device
+      outTopic = ["te", "device", "main", "", "", "e", segments[2]].join("/");
+    } else {
+      // child device
+      outTopic = ["te", "device", segments[3], "", "", "e", segments[2]].join("/");
+    }
+  } else if (segments[1] == "alarms") {
+    if (segments.length == 4) {
+      // main device
+      outTopic = ["te", "device", "main", "", "", "a", segments[3]].join("/");
+      outPayload["severity"] = segments[2];
+    } else {
+      // child device
+      outTopic = ["te", "device", segments[4], "", "", "a", segments[3]].join("/");
+      outPayload["severity"] = segments[2];
+    }
+  } else if (segments[1] == "health") {
+    if (segments.length == 3) {
+      // main device
+      outTopic = ["te", "device", "main", "service", segments[2], "health", "status"].join("/");
+    } else {
+      // child device
+      outTopic = ["te", "device", segments[2], "service", segments[3], "health", "status"].join("/");
+    }
+  }
+
+  return {
+    topic: outTopic,
+    payload: prettify(outPayload),
+  };
+}
+
+function convertNewToLegacyApi(topic, payload) {
+  // TODO: Check if this conversion is worth doing or not
+  return {topic, payload};
+}
+
+function convertTedgeMessageFormat(topic, payload, format="legacy") {
+  if (format == "v1" && topic.startsWith("tedge/")) {
+    return convertLegacyToNewAPI(topic, payload);
+  }
+
+  if (format == "legacy" && topic.startsWith("te/")) {
+    return convertNewToLegacyApi(topic, payload);
+  }
+
+  // Either already in te/ format, or it is using a non thin-edge format, so it
+  // should be left untouched 
+  return {
+    topic,
+    payload,
+  };
+}
+
 module.exports = {
   convertToMosquitto,
+  convertToTedgeCLI,
   parseTedgeCommand,
+  convertTedgeMessageFormat,
   prettify,
 };
