@@ -12,6 +12,10 @@ function processKey(value, start) {
     if (c == '=') {
       break;
     }
+
+    if (c == ' ') {
+      start = index + 1;
+    }
     index++;
   }
   return { value: value.substring(start, index), index: index + 1 };
