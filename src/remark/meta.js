@@ -12,6 +12,10 @@ function processKey(value, start) {
     if (c == '=') {
       break;
     }
+
+    if (c == ' ') {
+      start = index + 1;
+    }
     index++;
   }
   return { value: value.substring(start, index), index: index + 1 };
@@ -45,10 +49,10 @@ function processValue(value, start) {
 /*
   Convert meta data in string format to an object (for easier parsing)
 */
-function fromString(raw) {
+function fromString(raw, defaultValues={}) {
   let index = 0;
   let current = raw;
-  let meta = {};
+  let meta = defaultValues;
 
   while (index < current.length) {
     const metaKey = processKey(current, index);
@@ -58,7 +62,12 @@ function fromString(raw) {
     index = metaValue.index;
 
     if (metaKey.value) {
-      meta[metaKey.value] = metaValue.value;
+      try {
+        meta[metaKey.value] = JSON.parse(metaValue.value)
+      } catch (e) {
+        // ignore error and use value as is
+        meta[metaKey.value] = metaValue.value
+      }
     }
   }
   return meta;
