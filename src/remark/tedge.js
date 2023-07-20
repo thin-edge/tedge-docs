@@ -12,8 +12,8 @@ function parseTedgeCommand(code, format='legacy', debug=false) {
     action: MQTT_PUB,
     topic: '',
     payload: '',
-    retain: '',
-    qos: '',
+    retain: false,
+    qos: 0,
     // Preserve any additional arguments
     remainingArgs: '',
   };
@@ -214,10 +214,10 @@ function convertLegacyToNewAPI(topic, payload) {
   } else if (segments[1] == "health") {
     if (segments.length == 3) {
       // main device
-      outTopic = ["te", "device", "main", "service", segments[2], "health", "status"].join("/");
+      outTopic = ["te", "device", "main", "service", segments[2], "status", "health"].join("/");
     } else {
       // child device
-      outTopic = ["te", "device", segments[2], "service", segments[3], "health", "status"].join("/");
+      outTopic = ["te", "device", segments[2], "service", segments[3], "status", "health"].join("/");
     }
   }
 
@@ -227,9 +227,83 @@ function convertLegacyToNewAPI(topic, payload) {
   };
 }
 
+/*
+  Convert the tedge v1 to the legacy topics/payload
+*/
 function convertNewToLegacyApi(topic, payload) {
-  // TODO: Check if this conversion is worth doing or not
-  return {topic, payload};
+  const segments = topic.split("/");
+  const identifier = segments.slice(1, 5);
+  const deviceName = identifier[1];
+  const serviceName = identifier[3];
+  const dataType = segments[5];
+  const dataSubType = segments[6];
+
+  let outTopic = topic;
+  let outPayload = {};
+  if (payload && typeof payload === "string") {
+    try {
+      outPayload = JSON.parse(payload);
+    } catch (e) {
+      // ignore error
+      console.log(`Could not parse json. value=${payload}, error=${e}`);
+    }
+  }
+
+  // Don't perform the translation if the topic does not match the pattern
+  const isValidTopic = identifier[0] == "device";
+  if (!isValidTopic) {
+    return {
+      topic: outTopic,
+      payload: prettify(outPayload),
+      error: true,
+      message: "Topic name does not conform to te/device/+/+/+/#",
+    };
+  }
+
+  const isMainDevice = deviceName === "main";
+
+  if (dataType == "m") {
+    if (isMainDevice) {
+      // main device
+      outTopic = ["tedge", "measurements"].join("/");
+    } else {
+      // child device
+      outTopic = ["tedge", "measurements", deviceName].join("/");
+    }
+  } else if (dataType == "e") {
+    if (isMainDevice) {
+      // main device
+      outTopic = ["tedge", "events", dataSubType].join("/");
+    } else {
+      // child device
+      outTopic = ["tedge", "events", dataSubType, deviceName].join("/");
+    }
+  } else if (dataType == "a") {
+    const severity = outPayload["severity"] || "major";
+    if (outPayload["severity"]) {
+      delete outPayload["severity"];
+    }
+    if (isMainDevice) {
+      // main device
+      outTopic = ["tedge", "alarms", severity, dataSubType].join("/");
+    } else {
+      // child device
+      outTopic = ["tedge", "alarms", severity, dataSubType, deviceName].join("/");
+    }
+  } else if (dataType == "status" && dataSubType == "health" && serviceName) {
+    if (isMainDevice) {
+      // main device
+      outTopic = ["tedge", "health", serviceName].join("/");
+    } else {
+      // child device
+      outTopic = ["tedge", "health", deviceName, serviceName].join("/");
+    }
+  }
+
+  return {
+    topic: outTopic,
+    payload: prettify(outPayload),
+  };
 }
 
 function convertTedgeMessageFormat(topic, payload, format="legacy") {
@@ -245,7 +319,7 @@ function convertTedgeMessageFormat(topic, payload, format="legacy") {
   // should be left untouched 
   return {
     topic,
-    payload,
+    payload: prettify(payload),
   };
 }
 
