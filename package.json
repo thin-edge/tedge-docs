@@ -6,6 +6,7 @@
     "docusaurus": "docusaurus",
     "start": "cross-env-shell docusaurus start $DOCUSAURUS_OPTIONS",
     "build": "docusaurus build",
+    "test": "jest",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -30,7 +31,9 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.4.1",
-    "cross-env": "^7.0.3"
+    "@jest/globals": "^29.6.1",
+    "cross-env": "^7.0.3",
+    "jest": "^29.6.1"
   },
   "browserslist": {
     "production": [
