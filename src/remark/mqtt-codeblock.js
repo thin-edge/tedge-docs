@@ -109,7 +109,7 @@ function collectCodeNodes(code, converters = [], formats = [], groupTabs = false
       if (converter == 'mqtt') {
         nodes.push({
           type: "jsx",
-          value: `<p>API version: ${format}</p>`,
+          value: `<p><strong>API version: ${format}</strong></p>`,
         });
       }
 
