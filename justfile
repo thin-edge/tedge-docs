@@ -73,6 +73,10 @@ docs: install
 build: install
     yarn build
 
+# Run unit tests (to check custom plugins etc.)
+test:
+    yarn run test
+
 # Serve production docs
 serve:
     yarn run serve
