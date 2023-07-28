@@ -27,6 +27,9 @@ const config = {
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl,
 
+  // Normalize trailing slashes
+  trailingSlash: true,
+
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'thin-edge', // Usually your GitHub org/user name.
