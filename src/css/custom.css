@@ -72,3 +72,7 @@ html[data-theme='dark'] .header-github-link:before {
   position: absolute;
   left: -30px;
 }
+
+.logo {
+  margin: 20px;
+}
