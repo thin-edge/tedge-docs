@@ -80,7 +80,7 @@ const config = {
             docPath,
           }) => version == 'current' ? `https://github.com/thin-edge/thin-edge.io/edit/main/docs/src/${docPath}` : undefined,
           beforeDefaultRemarkPlugins: [
-            [remarkCmdRun, {showErrors: false, strict: false, logErrors: false}],
+            [remarkCmdRun, { showErrors: false, strict: false, logErrors: false }],
           ],
           remarkPlugins: [
             [
@@ -109,6 +109,35 @@ const config = {
     ],
   ],
   plugins: [
+    // @ts-ignore
+    async function redirectInitialRequestToPathWithTrailingSlash(context, options) {
+      return {
+        name: 'plugin-redirect-trailing-slash',
+        configureWebpack(_config, _isServer, _utils) {
+          return {
+            devServer: {
+              setupMiddlewares(middlewares, _devServer) {
+                middlewares.unshift({
+                  name: 'redirect-trailing-slash',
+                  middleware: (req, res, next) => {
+                    // We need to add a prefix to the path to do URL manipulation
+                    let url = new URL(`https://example.com${req.url}`);
+                    if (url.pathname.length > 0 && !url.pathname.endsWith('/')) {
+                      // Manipulate just the path to preserve stuff after the path (like # or ?)
+                      url.pathname += '/';
+                      res.redirect(302, url.toString().slice("https://example.com".length));
+                    } else {
+                      next()
+                    }
+                  }
+                })
+                return middlewares
+              }
+            },
+          }
+        }
+      }
+    },
     'plugin-image-zoom',
     [
       '@docusaurus/plugin-client-redirects',
