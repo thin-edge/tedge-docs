@@ -75,7 +75,7 @@ build: install
 
 # Run unit tests (to check custom plugins etc.)
 test:
-    yarn run test
+    cd remark && yarn run test
 
 # Serve production docs
 serve:
