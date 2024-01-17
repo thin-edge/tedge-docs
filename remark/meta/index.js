@@ -30,7 +30,7 @@ function processValue(value, start) {
   while (index < value.length) {
     c = value.at(index);
     if (c == '"') {
-      inQuote = !inQuote
+      inQuote = !inQuote;
     }
     if (c == ' ' && !inQuote) {
       break;
@@ -49,7 +49,7 @@ function processValue(value, start) {
 /*
   Convert meta data in string format to an object (for easier parsing)
 */
-function fromString(raw, defaultValues={}) {
+function fromString(raw, defaultValues = {}) {
   let index = 0;
   let current = raw;
   let meta = defaultValues;
@@ -63,10 +63,10 @@ function fromString(raw, defaultValues={}) {
 
     if (metaKey.value) {
       try {
-        meta[metaKey.value] = JSON.parse(metaValue.value)
+        meta[metaKey.value] = JSON.parse(metaValue.value);
       } catch (e) {
         // ignore error and use value as is
-        meta[metaKey.value] = metaValue.value
+        meta[metaKey.value] = metaValue.value;
       }
     }
   }

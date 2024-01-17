@@ -38,7 +38,7 @@ const plugin = (options) => {
 
       // set defaults
       if (!meta.title) {
-        meta.title = "Output";
+        meta.title = 'Output';
       }
 
       // execute command and use the result in the code block

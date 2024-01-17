@@ -1,7 +1,11 @@
-
 import { visit } from 'unist-util-visit';
 import { is } from 'unist-util-is';
-import { convertToMosquitto, prettify, parseTedgeCommand, convertToTedgeCLI } from '../tedge';
+import {
+  convertToMosquitto,
+  prettify,
+  parseTedgeCommand,
+  convertToTedgeCLI,
+} from '../tedge';
 import metaUtils from '../meta';
 
 const importNodes = {
@@ -11,41 +15,41 @@ const importNodes = {
         {
           source: {
             raw: "'@theme/Tabs'",
-            type: "Literal",
-            value: "@theme/Tabs",
+            type: 'Literal',
+            value: '@theme/Tabs',
           },
           specifiers: [
             {
-              local: { name: "Tabs", type: "Identifier" },
-              type: "ImportDefaultSpecifier",
+              local: { name: 'Tabs', type: 'Identifier' },
+              type: 'ImportDefaultSpecifier',
             },
           ],
-          type: "ImportDeclaration",
+          type: 'ImportDeclaration',
         },
         {
           source: {
             raw: "'@theme/TabItem'",
-            type: "Literal",
-            value: "@theme/TabItem",
+            type: 'Literal',
+            value: '@theme/TabItem',
           },
           specifiers: [
             {
-              local: { name: "TabItem", type: "Identifier" },
-              type: "ImportDefaultSpecifier",
+              local: { name: 'TabItem', type: 'Identifier' },
+              type: 'ImportDefaultSpecifier',
             },
           ],
-          type: "ImportDeclaration",
+          type: 'ImportDeclaration',
         },
       ],
-      type: "Program",
+      type: 'Program',
     },
   },
-  type: "mdxjsEsm",
+  type: 'mdxjsEsm',
   value:
     "import Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';",
 };
 
-function createCodeExample(code, converter, format='legacy', title='') {
+function createCodeExample(code, converter, format = 'legacy', title = '') {
   const api = parseTedgeCommand(code, format, false);
 
   if (converter === 'mosquitto') {
@@ -55,7 +59,7 @@ function createCodeExample(code, converter, format='legacy', title='') {
         lang: 'sh',
         meta: title ? `title="${title}"` : ``,
         value: convertToMosquitto(api),
-      }
+      },
     ];
   }
   if (converter === 'mqtt') {
@@ -71,7 +75,10 @@ function createCodeExample(code, converter, format='legacy', title='') {
         {
           type: 'code',
           lang: 'sh',
-          meta: blockTitle.length > 0 ? `title="Publish topic: ${blockTitle.join(', ')}"` : `title="Publish topic"`,
+          meta:
+            blockTitle.length > 0
+              ? `title="Publish topic: ${blockTitle.join(', ')}"`
+              : `title="Publish topic"`,
           value: prettify(api.topic),
         },
         {
@@ -79,7 +86,7 @@ function createCodeExample(code, converter, format='legacy', title='') {
           lang: 'sh',
           meta: `title="Payload"`,
           value: prettify(api.payload || '<<empty>>'),
-        }
+        },
       ];
     }
     return [
@@ -88,7 +95,7 @@ function createCodeExample(code, converter, format='legacy', title='') {
         lang: 'sh',
         meta: `title="Subscribe: topic"`,
         value: prettify(api.topic),
-      }
+      },
     ];
   }
 
@@ -99,11 +106,16 @@ function createCodeExample(code, converter, format='legacy', title='') {
       lang: 'sh',
       meta: title ? `title="${title}"` : ``,
       value: convertToTedgeCLI(api),
-    }
+    },
   ];
 }
 
-function collectCodeNodes(code, converters = [], formats = [], groupTabs = false) {
+function collectCodeNodes(
+  code,
+  converters = [],
+  formats = [],
+  groupTabs = false,
+) {
   const tabNodes = [];
 
   if (formats.length == 0) {
@@ -119,10 +131,13 @@ function collectCodeNodes(code, converters = [], formats = [], groupTabs = false
 
   if (formats.length == 1 || !groupTabs) {
     // Option 1: Each convert and format are on separate tabs
-    formats.forEach(format => {
-      converters.forEach(converter => {
+    formats.forEach((format) => {
+      converters.forEach((converter) => {
         const nodes = createCodeExample(code, converter, format);
-        tabNodes.push([nodes, { label: formatLabel(converter, format), value: converter }]);
+        tabNodes.push([
+          nodes,
+          { label: formatLabel(converter, format), value: converter },
+        ]);
       });
     });
     return tabNodes;
@@ -130,10 +145,9 @@ function collectCodeNodes(code, converters = [], formats = [], groupTabs = false
 
   // Option 2: Group the different formats of the same convert within the same tab
   // e.g. the 'mosquitto' tab will show both the legacy and new api examples
-  converters.forEach(converter => {
+  converters.forEach((converter) => {
     const nodes = [];
-    formats.forEach(format => {
-
+    formats.forEach((format) => {
       // Special case for mqtt, the code block title is already used
       // so it needs an overall header
       if (converter == 'mqtt') {
@@ -142,15 +156,17 @@ function collectCodeNodes(code, converters = [], formats = [], groupTabs = false
           children: [
             {
               type: 'strong',
-              children: [{type: 'text', value: `API version: ${format}`}]
+              children: [{ type: 'text', value: `API version: ${format}` }],
             },
-          ]
+          ],
         });
       }
 
       // Add code
-      nodes.push(...createCodeExample(code, converter, format, `API version: ${format}`));
-    })
+      nodes.push(
+        ...createCodeExample(code, converter, format, `API version: ${format}`),
+      );
+    });
     tabNodes.push([nodes, { label: converter, value: converter }]);
   });
   return tabNodes;
@@ -160,42 +176,48 @@ function formatTabs(tabNodes, { groupId, labels, sync }) {
   const children = tabNodes.map(([nodes, meta]) => {
     const lang = nodes[0].lang;
     const label = meta.label ?? labels.get(lang);
-    const value = meta.label?.toLowerCase().replace(" ", "-") ?? lang;
+    const value = meta.label?.toLowerCase().replace(' ', '-') ?? lang;
 
-    const attributes = [{ name: "value", type: "mdxJsxAttribute", value }];
+    const attributes = [{ name: 'value', type: 'mdxJsxAttribute', value }];
 
     if (label != null) {
-      attributes.push({ name: "label", type: "mdxJsxAttribute", value: label });
+      attributes.push({ name: 'label', type: 'mdxJsxAttribute', value: label });
     }
 
     return {
       attributes,
       children: nodes,
-      name: "TabItem",
-      type: "mdxJsxFlowElement",
+      name: 'TabItem',
+      type: 'mdxJsxFlowElement',
     };
   });
 
   const attributes = [];
   if (sync) {
     attributes.push({
-      name: "groupId",
-      type: "mdxJsxAttribute",
+      name: 'groupId',
+      type: 'mdxJsxAttribute',
       value: groupId,
     });
   }
   // const children = tabNodes.map(([nodes, meta]) => formatTabItem(nodes, meta));
-  return { attributes, children, name: "Tabs", type: "mdxJsxFlowElement" };
+  return { attributes, children, name: 'Tabs', type: 'mdxJsxFlowElement' };
 }
 
 const plugin = (options = {}) => {
-  const { sync = true, groupId = 'te2mqtt', converters = ['tedge', 'mosquitto', 'mqtt'], formats = ['legacy', 'v1'], groupTabs = false } = options;
+  const {
+    sync = true,
+    groupId = 'te2mqtt',
+    converters = ['tedge', 'mosquitto', 'mqtt'],
+    formats = ['legacy', 'v1'],
+    groupTabs = false,
+  } = options;
   return (root) => {
     let transformed = false;
     let includesImportTabs = false;
 
     visit(root, ['code', 'mdxjsEsm'], (node, index, parent) => {
-      if (is(node, "mdxjsEsm") && node.value.includes("@theme/Tabs")) {
+      if (is(node, 'mdxjsEsm') && node.value.includes('@theme/Tabs')) {
         includesImportTabs = true;
         return;
       }
@@ -213,7 +235,12 @@ const plugin = (options = {}) => {
         }
 
         const code = node.value;
-        const codeBlocks = collectCodeNodes(code, converters, instanceFormats, codeOptions.groupTabs);
+        const codeBlocks = collectCodeNodes(
+          code,
+          converters,
+          instanceFormats,
+          codeOptions.groupTabs,
+        );
         const tabs = formatTabs(codeBlocks, {
           sync,
           groupId,
