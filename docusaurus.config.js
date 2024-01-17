@@ -2,10 +2,11 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const fs = require('fs');
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require('prism-react-renderer').themes.github;
+const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 const remarkCmdRun = require('./src/remark/cmd-run');
 const remarkMqttCodeBlock = require('./src/remark/mqtt-codeblock');
+import tabBlocks from "docusaurus-remark-plugin-tab-blocks";
 
 const docsDir = process.env.DOCS_DIR || 'docs';
 const domain = process.env.DOMAIN || 'https://thin-edge.github.io';
@@ -80,25 +81,27 @@ const config = {
             docPath,
           }) => version == 'current' ? `https://github.com/thin-edge/thin-edge.io/edit/main/docs/src/${docPath}` : undefined,
           beforeDefaultRemarkPlugins: [
-            [remarkCmdRun, { showErrors: false, strict: false, logErrors: false }],
+            // TODO: Enable after refactoring to MDX v3
+            // [remarkCmdRun, { showErrors: false, strict: false, logErrors: false }],
           ],
           remarkPlugins: [
-            [
-              remarkMqttCodeBlock,
-              {
-                sync: true,
-                converters: ['tedge', 'mosquitto', 'mqtt'],
-                formats: ['legacy'],
-                // Enable both v1 and legacy examples in code blocks
-                // formats: ['v1', 'legacy'],
+            // TODO: Enable after refactoring to MDX v3
+            // [
+            //   remarkMqttCodeBlock,
+            //   {
+            //     sync: true,
+            //     converters: ['tedge', 'mosquitto', 'mqtt'],
+            //     formats: ['legacy'],
+            //     // Enable both v1 and legacy examples in code blocks
+            //     // formats: ['v1', 'legacy'],
 
-                // Group the formats together in the same tabs
-                // e.g. if using 'v1' and 'legacy' formats, both will appear under the 'tedge'
-                // table if grouping is enabled
-                groupTabs: true,
-              }
-            ],
-            require('docusaurus-remark-plugin-tab-blocks'),
+            //     // Group the formats together in the same tabs
+            //     // e.g. if using 'v1' and 'legacy' formats, both will appear under the 'tedge'
+            //     // table if grouping is enabled
+            //     groupTabs: true,
+            //   }
+            // ],
+            tabBlocks,
           ],
         },
         blog: false, // Optional: disable the blog plugin
@@ -227,6 +230,7 @@ const config = {
         darkTheme: darkCodeTheme,
         additionalLanguages: [
           'bash',
+          'json',
           'json5',
           'log',
           'toml',
