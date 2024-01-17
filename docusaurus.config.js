@@ -22,6 +22,10 @@ const config = {
   favicon: 'img/favicon.ico',
   markdown: {
     mermaid: true,
+    // Use preprocessor to replace global variables
+    preprocessor: ({filePath, fileContent}) => {
+      return fileContent.replaceAll('{{te}}', '**thin-edge.io**');
+    },
   },
   themes: ['@docusaurus/theme-mermaid'],
   // Set the production url of your site here
