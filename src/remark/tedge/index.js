@@ -2,7 +2,7 @@
   Helper functions to parse meta data associated to a node
 */
 
-const parse = require('shell-quote/parse');
+import {parse} from 'shell-quote'
 
 const MQTT_PUB = 'pub';
 const MQTT_SUB = 'sub';
@@ -18,7 +18,7 @@ function parseTedgeCommand(code, format='legacy', debug=false) {
     remainingArgs: '',
   };
 
-  args = parse(code);
+  let args = parse(code);
   const positionalArgs = [];
 
   let i = 3;
@@ -323,7 +323,7 @@ function convertTedgeMessageFormat(topic, payload, format="legacy") {
   };
 }
 
-module.exports = {
+export default {
   convertToMosquitto,
   convertToTedgeCLI,
   parseTedgeCommand,

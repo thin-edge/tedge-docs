@@ -86,7 +86,7 @@ function toString(meta, ignore = []) {
   return props.join(' ');
 }
 
-module.exports = {
+export default {
   toString,
   fromString,
 };

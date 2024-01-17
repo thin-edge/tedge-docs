@@ -1,5 +1,5 @@
-const tedge = require('./tedge');
-const {test, expect, describe} = require('@jest/globals')
+import tedge from '.';
+import {test, expect, describe} from '@jest/globals';
 
 const apiMapping = {
     /* Measurements */

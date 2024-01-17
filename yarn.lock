@@ -2429,7 +2429,7 @@
   dependencies:
     "@types/unist" "^2"
 
-"@types/mdast@^4.0.0", "@types/mdast@^4.0.2":
+"@types/mdast@^4.0.0", "@types/mdast@^4.0.2", "@types/mdast@^4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@types/mdast/-/mdast-4.0.3.tgz#1e011ff013566e919a4232d1701ad30d70cab333"
   integrity sha512-LsjtqsyF+d2/yFOYaN22dHZI1Cpwkrj+g06G8+qtUKlhovPW89YhqSnfKtMbkgmEtYpH2gydRNULd6y8mciAFg==
@@ -2575,6 +2575,11 @@
     "@types/http-errors" "*"
     "@types/mime" "*"
     "@types/node" "*"
+
+"@types/shell-quote@^1.7.5":
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/@types/shell-quote/-/shell-quote-1.7.5.tgz#6db4704742d307cd6d604e124e3ad6cd5ed943f3"
+  integrity sha512-+UE8GAGRPbJVQDdxi16dgadcBfQ+KG2vgZhV1+3A1XmHbmwcdwhCUwIdy+d3pAGrbvgRoVSjeI9vOWyq376Yzw==
 
 "@types/sockjs@^0.3.33":
   version "0.3.36"

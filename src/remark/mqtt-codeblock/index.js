@@ -1,19 +1,49 @@
 
-const visit = require('unist-util-visit');
-const is = require('unist-util-is');
-const { convertToMosquitto, prettify, parseTedgeCommand, convertToTedgeCLI } = require('./tedge');
-const metaUtils = require('./meta');
+import { visit } from 'unist-util-visit';
+import { is } from 'unist-util-is';
+import { convertToMosquitto, prettify, parseTedgeCommand, convertToTedgeCLI } from '../tedge';
+import metaUtils from '../meta';
 
-const importNodes = [
-  {
-    type: "import",
-    value: "import Tabs from '@theme/Tabs';",
+const importNodes = {
+  data: {
+    estree: {
+      body: [
+        {
+          source: {
+            raw: "'@theme/Tabs'",
+            type: "Literal",
+            value: "@theme/Tabs",
+          },
+          specifiers: [
+            {
+              local: { name: "Tabs", type: "Identifier" },
+              type: "ImportDefaultSpecifier",
+            },
+          ],
+          type: "ImportDeclaration",
+        },
+        {
+          source: {
+            raw: "'@theme/TabItem'",
+            type: "Literal",
+            value: "@theme/TabItem",
+          },
+          specifiers: [
+            {
+              local: { name: "TabItem", type: "Identifier" },
+              type: "ImportDefaultSpecifier",
+            },
+          ],
+          type: "ImportDeclaration",
+        },
+      ],
+      type: "Program",
+    },
   },
-  {
-    type: "import",
-    value: "import TabItem from '@theme/TabItem';",
-  },
-];
+  type: "mdxjsEsm",
+  value:
+    "import Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';",
+};
 
 function createCodeExample(code, converter, format='legacy', title='') {
   const api = parseTedgeCommand(code, format, false);
@@ -30,18 +60,18 @@ function createCodeExample(code, converter, format='legacy', title='') {
   }
   if (converter === 'mqtt') {
     if (api.action == 'pub') {
-      const title = [];
+      const blockTitle = [];
       if (api.retain) {
-        title.push(`retain=${api.retain}`);
+        blockTitle.push(`retain=${api.retain}`);
       }
       if (api.qos) {
-        title.push(`qos=${api.qos}`);
+        blockTitle.push(`qos=${api.qos}`);
       }
       return [
         {
           type: 'code',
           lang: 'sh',
-          meta: title.length > 0 ? `title="Publish topic: ${title.join(', ')}"` : `title="Publish topic"`,
+          meta: blockTitle.length > 0 ? `title="Publish topic: ${blockTitle.join(', ')}"` : `title="Publish topic"`,
           value: prettify(api.topic),
         },
         {
@@ -108,13 +138,18 @@ function collectCodeNodes(code, converters = [], formats = [], groupTabs = false
       // so it needs an overall header
       if (converter == 'mqtt') {
         nodes.push({
-          type: "jsx",
-          value: `<p><strong>API version: ${format}</strong></p>`,
+          type: 'paragraph',
+          children: [
+            {
+              type: 'strong',
+              children: [{type: 'text', value: `API version: ${format}`}]
+            },
+          ]
         });
       }
 
       // Add code
-      nodes.push(...createCodeExample(code, converter, format, title=`API version: ${format}`));
+      nodes.push(...createCodeExample(code, converter, format, `API version: ${format}`));
     })
     tabNodes.push([nodes, { label: converter, value: converter }]);
   });
@@ -122,35 +157,35 @@ function collectCodeNodes(code, converters = [], formats = [], groupTabs = false
 }
 
 function formatTabs(tabNodes, { groupId, labels, sync }) {
-  function formatTabItem(nodes, meta) {
+  const children = tabNodes.map(([nodes, meta]) => {
     const lang = nodes[0].lang;
     const label = meta.label ?? labels.get(lang);
-    const value = meta.label?.toLowerCase() ?? lang;
+    const value = meta.label?.toLowerCase().replace(" ", "-") ?? lang;
 
-    return [
-      {
-        type: "jsx",
-        value: `<TabItem value="${value}"${label ? ` label="${label}"` : ""}>`,
-      },
-      ...nodes,
-      {
-        type: "jsx",
-        value: "</TabItem>",
-      },
-    ];
+    const attributes = [{ name: "value", type: "mdxJsxAttribute", value }];
+
+    if (label != null) {
+      attributes.push({ name: "label", type: "mdxJsxAttribute", value: label });
+    }
+
+    return {
+      attributes,
+      children: nodes,
+      name: "TabItem",
+      type: "mdxJsxFlowElement",
+    };
+  });
+
+  const attributes = [];
+  if (sync) {
+    attributes.push({
+      name: "groupId",
+      type: "mdxJsxAttribute",
+      value: groupId,
+    });
   }
-
-  return [
-    {
-      type: "jsx",
-      value: `<Tabs${sync ? ` groupId="${groupId}"` : ""}>`,
-    },
-    ...tabNodes.map(([nodes, meta]) => formatTabItem(nodes, meta)),
-    {
-      type: "jsx",
-      value: "</Tabs>",
-    },
-  ].flat();
+  // const children = tabNodes.map(([nodes, meta]) => formatTabItem(nodes, meta));
+  return { attributes, children, name: "Tabs", type: "mdxJsxFlowElement" };
 }
 
 const plugin = (options = {}) => {
@@ -159,8 +194,8 @@ const plugin = (options = {}) => {
     let transformed = false;
     let includesImportTabs = false;
 
-    visit(root, ['code', 'import'], (node, index, parent) => {
-      if (is(node, 'import') && node.value.includes('@theme/Tabs')) {
+    visit(root, ['code', 'mdxjsEsm'], (node, index, parent) => {
+      if (is(node, "mdxjsEsm") && node.value.includes("@theme/Tabs")) {
         includesImportTabs = true;
         return;
       }
@@ -183,15 +218,15 @@ const plugin = (options = {}) => {
           sync,
           groupId,
         });
-        parent.children.splice(index, 1, ...tabs);
+        parent.children.splice(index, 1, tabs);
         transformed = true;
       }
     });
 
     if (transformed && !includesImportTabs) {
-      root.children.unshift(...importNodes);
+      root.children.unshift(importNodes);
     }
   };
 };
 
-module.exports = plugin;
+export default plugin;

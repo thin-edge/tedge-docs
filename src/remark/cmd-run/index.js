@@ -25,9 +25,9 @@
   Note:
   * The code block
 */
-const { execSync } = require('child_process');
-const visit = require('unist-util-visit');
-const metaUtils = require('./meta');
+import { visit } from 'unist-util-visit';
+import { execSync } from 'child_process';
+import metaUtils from '../meta';
 
 const plugin = (options) => {
   const defaultLang = 'text';
@@ -83,4 +83,4 @@ const plugin = (options) => {
   return transformer;
 };
 
-module.exports = plugin;
+export default plugin;

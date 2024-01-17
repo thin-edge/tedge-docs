@@ -1,12 +1,14 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const fs = require('fs');
-const lightCodeTheme = require('prism-react-renderer').themes.github;
-const darkCodeTheme = require('prism-react-renderer').themes.dracula;
-const remarkCmdRun = require('./src/remark/cmd-run');
-const remarkMqttCodeBlock = require('./src/remark/mqtt-codeblock');
-import tabBlocks from "docusaurus-remark-plugin-tab-blocks";
+import fs from 'fs';
+import {themes} from 'prism-react-renderer';
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
+
+import remarkCmdRun from './src/remark/cmd-run';
+import remarkMqttCodeBlock from './src/remark/mqtt-codeblock';
+import tabBlocks from 'docusaurus-remark-plugin-tab-blocks';
 
 const docsDir = process.env.DOCS_DIR || 'docs';
 const domain = process.env.DOMAIN || 'https://thin-edge.github.io';
@@ -81,26 +83,24 @@ const config = {
             docPath,
           }) => version == 'current' ? `https://github.com/thin-edge/thin-edge.io/edit/main/docs/src/${docPath}` : undefined,
           beforeDefaultRemarkPlugins: [
-            // TODO: Enable after refactoring to MDX v3
-            // [remarkCmdRun, { showErrors: false, strict: false, logErrors: false }],
+            [remarkCmdRun, { showErrors: false, strict: false, logErrors: false }],
           ],
           remarkPlugins: [
-            // TODO: Enable after refactoring to MDX v3
-            // [
-            //   remarkMqttCodeBlock,
-            //   {
-            //     sync: true,
-            //     converters: ['tedge', 'mosquitto', 'mqtt'],
-            //     formats: ['legacy'],
-            //     // Enable both v1 and legacy examples in code blocks
-            //     // formats: ['v1', 'legacy'],
+            [
+              remarkMqttCodeBlock,
+              {
+                sync: true,
+                converters: ['tedge', 'mosquitto', 'mqtt'],
+                formats: ['legacy'],
+                // Enable both v1 and legacy examples in code blocks
+                // formats: ['v1', 'legacy'],
 
-            //     // Group the formats together in the same tabs
-            //     // e.g. if using 'v1' and 'legacy' formats, both will appear under the 'tedge'
-            //     // table if grouping is enabled
-            //     groupTabs: true,
-            //   }
-            // ],
+                // Group the formats together in the same tabs
+                // e.g. if using 'v1' and 'legacy' formats, both will appear under the 'tedge'
+                // table if grouping is enabled
+                groupTabs: true,
+              }
+            ],
             tabBlocks,
           ],
         },
