@@ -72,9 +72,9 @@ You should now have access to the `tedge`, `tedge-agent` and `tedge-mapper` bina
 Download the debian files from the [latest releases page](https://github.com/thin-edge/thin-edge.io/releases/latest).
 For a minimal configuration of thin-edge.io with Cumulocity IoT, you will need to download:
 
-- tedge\_{VERSION}\_amd64.deb
-- tedge\_agent\_{VERSION}\_amd64.deb
-- tedge\_mapper\_{VERSION}\_amd64.deb
+- `tedge\_{VERSION}\_amd64.deb`
+- `tedge\_agent\_{VERSION}\_amd64.deb`
+- `tedge\_mapper\_{VERSION}\_amd64.deb`
 
 <p align="center">
     <img

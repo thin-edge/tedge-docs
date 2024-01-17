@@ -14,9 +14,9 @@ Files can be uploaded, downloaded and deleted from this repository via the follo
 
 |Type|Method|Endpoint|
 |----|------|--------|
-|Upload|PUT|http://{tedge-ip}:8000/tedge/file-transfer/{path}/{to}/{resource}|
-|Download|GET|http://{tedge-ip}:8000/tedge/file-transfer/{path}/{to}/{resource}|
-|Delete|DELETE|http://{tedge-ip}:8000/tedge/file-transfer/{path}/{to}/{resource}|
+|Upload|PUT|`http://{tedge-ip}:8000/tedge/file-transfer/{path}/{to}/{resource}`|
+|Download|GET|`http://{tedge-ip}:8000/tedge/file-transfer/{path}/{to}/{resource}`|
+|Delete|DELETE|`http://{tedge-ip}:8000/tedge/file-transfer/{path}/{to}/{resource}`|
 
 The `tedge-ip` is derived from the following tedge configurations:
 
