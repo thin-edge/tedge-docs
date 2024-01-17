@@ -6,8 +6,8 @@ import { themes } from 'prism-react-renderer';
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
 
-import remarkCmdRun from './remark/cmd-run';
-import remarkMqttCodeBlock from './remark/mqtt-codeblock';
+import remarkCmdRun from './remark/cmd-run/index.js';
+import remarkMqttCodeBlock from './remark/mqtt-codeblock/index.js';
 import tabBlocks from 'docusaurus-remark-plugin-tab-blocks';
 
 const docsDir = process.env.DOCS_DIR || 'docs';

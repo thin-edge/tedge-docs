@@ -27,7 +27,7 @@
 */
 import { visit } from 'unist-util-visit';
 import { execSync } from 'child_process';
-import metaUtils from '../meta';
+import metaUtils from '../meta/index.js';
 
 const plugin = (options) => {
   const defaultLang = 'text';

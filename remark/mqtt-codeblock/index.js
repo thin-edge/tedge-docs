@@ -5,8 +5,8 @@ import {
   prettify,
   parseTedgeCommand,
   convertToTedgeCLI,
-} from '../tedge';
-import metaUtils from '../meta';
+} from '../tedge/index.js';
+import metaUtils from '../meta/index.js';
 
 const importNodes = {
   data: {
