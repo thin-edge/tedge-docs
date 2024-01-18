@@ -1,0 +1,52 @@
+.pluginTextSearch:focus-within {
+    box-shadow: inset 0 0 0 2px var(--docsearch-primary-color);
+    outline: none;
+}
+
+.pluginTextSearch:hover {
+    box-shadow: inset 0 0 0 2px var(--docsearch-primary-color);
+    outline: none;
+}
+
+.pluginTextSearch:active {
+    box-shadow: inset 0 0 0 2px var(--ifm-color-secondary);
+    outline: none;
+}
+
+.pluginTextSearch {
+    box-shadow: inset 0 0 0 1px var(--ifm-color-secondary-darkest);
+    border: 0px;
+}
+
+.pluginForm {
+    align-items: center;
+    background: var(--ifm-card-background-color);
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px var(--ifm-color-secondary-darkest);
+    display: flex;
+    height: var(--docsearch-searchbox-height);
+    margin: 0;
+    padding: 0 var(--docsearch-spacing);
+    position: relative;
+    width: 100%
+}
+
+.searchIcon {
+    color: var(--ifm-color-emphasis-500);
+}
+
+.searchReset {
+    animation: fade-in .1s ease-in forwards;
+    appearance: none;
+    background: none;
+    border: 0;
+    color: var(--ifm-color-emphasis-500);
+    cursor: pointer;
+    padding: 2px;
+    right: 0;
+    stroke-width: var(--docsearch-icon-stroke-width)
+}
+
+.searchReset:hover {
+    color: var(--ifm-color-secondary-contrast-foreground);
+}
