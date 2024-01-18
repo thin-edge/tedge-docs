@@ -69,7 +69,7 @@ files = [
 The child device agent needs to upload this file to thin-edge [File Transfer Service][fts] with an HTTP PUT request
 to the URL: `http://{fts-address}:8000/tedge/file-transfer/{child-id}/c8y-configuration-plugin`
 
-* {fts-address}` is the address of the thin-edge.io device on which the [File Transfer Service][fts] is running
+* `{fts-address}` is the address of the thin-edge.io device on which the [File Transfer Service][fts] is running
 * `{child-id}` is the child-device-id
 
 [fts]: ../../references/tedge-file-transfer-service.md

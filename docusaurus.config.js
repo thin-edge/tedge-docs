@@ -1,11 +1,14 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const fs = require('fs');
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-const remarkCmdRun = require('./src/remark/cmd-run');
-const remarkMqttCodeBlock = require('./src/remark/mqtt-codeblock');
+import fs from 'fs';
+import { themes } from 'prism-react-renderer';
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
+
+import remarkCmdRun from './remark/cmd-run/index.js';
+import remarkMqttCodeBlock from './remark/mqtt-codeblock/index.js';
+import tabBlocks from 'docusaurus-remark-plugin-tab-blocks';
 
 const docsDir = process.env.DOCS_DIR || 'docs';
 const domain = process.env.DOMAIN || 'https://thin-edge.github.io';
@@ -19,6 +22,10 @@ const config = {
   favicon: 'img/favicon.ico',
   markdown: {
     mermaid: true,
+    // Use preprocessor to replace global variables
+    preprocessor: ({filePath, fileContent}) => {
+      return fileContent.replaceAll('{{te}}', '**thin-edge.io**');
+    },
   },
   themes: ['@docusaurus/theme-mermaid'],
   // Set the production url of your site here
@@ -37,6 +44,10 @@ const config = {
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
+
+  // Ignore until links have been fixed, as broken anchors were only
+  // checked from docusaurus 3.1 onwards
+  // onBrokenAnchors: 'log',
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -73,14 +84,17 @@ const config = {
           // https://github.com/facebook/docusaurus/issues/3272#issuecomment-879295056
           path: fs.realpathSync(docsDir),
           // Should the unreleased docs be published
-          includeCurrentVersion: includeCurrentVersion === "true",
+          includeCurrentVersion: includeCurrentVersion === 'true',
           // Enable "edit this page" links for only the current/next version
-          editUrl: ({
-            version,
-            docPath,
-          }) => version == 'current' ? `https://github.com/thin-edge/thin-edge.io/edit/main/docs/src/${docPath}` : undefined,
+          editUrl: ({ version, docPath }) =>
+            version == 'current'
+              ? `https://github.com/thin-edge/thin-edge.io/edit/main/docs/src/${docPath}`
+              : undefined,
           beforeDefaultRemarkPlugins: [
-            [remarkCmdRun, { showErrors: false, strict: false, logErrors: false }],
+            [
+              remarkCmdRun,
+              { showErrors: false, strict: false, logErrors: false },
+            ],
           ],
           remarkPlugins: [
             [
@@ -96,9 +110,9 @@ const config = {
                 // e.g. if using 'v1' and 'legacy' formats, both will appear under the 'tedge'
                 // table if grouping is enabled
                 groupTabs: true,
-              }
+              },
             ],
-            require('docusaurus-remark-plugin-tab-blocks'),
+            tabBlocks,
           ],
         },
         blog: false, // Optional: disable the blog plugin
@@ -110,7 +124,10 @@ const config = {
   ],
   plugins: [
     // @ts-ignore
-    async function redirectInitialRequestToPathWithTrailingSlash(context, options) {
+    async function redirectInitialRequestToPathWithTrailingSlash(
+      context,
+      options,
+    ) {
       return {
         name: 'plugin-redirect-trailing-slash',
         configureWebpack(_config, _isServer, _utils) {
@@ -122,21 +139,27 @@ const config = {
                   middleware: (req, res, next) => {
                     // We need to add a prefix to the path to do URL manipulation
                     let url = new URL(`https://example.com${req.url}`);
-                    if (url.pathname.length > 0 && !url.pathname.endsWith('/')) {
+                    if (
+                      url.pathname.length > 0 &&
+                      !url.pathname.endsWith('/')
+                    ) {
                       // Manipulate just the path to preserve stuff after the path (like # or ?)
                       url.pathname += '/';
-                      res.redirect(302, url.toString().slice("https://example.com".length));
+                      res.redirect(
+                        302,
+                        url.toString().slice('https://example.com'.length),
+                      );
                     } else {
-                      next()
+                      next();
                     }
-                  }
-                })
-                return middlewares
-              }
+                  },
+                });
+                return middlewares;
+              },
             },
-          }
-        }
-      }
+          };
+        },
+      };
     },
     'plugin-image-zoom',
     [
@@ -151,9 +174,7 @@ const config = {
         createRedirects(existingPath) {
           if (existingPath.includes('/html/')) {
             // Redirect from /html/team/X to /docs
-            return [
-              existingPath.replace('/html/', '/'),
-            ];
+            return [existingPath.replace('/html/', '/')];
           }
           return undefined; // Return a falsy value: no redirect created
         },
@@ -166,7 +187,7 @@ const config = {
       docs: {
         sidebar: {
           hideable: true,
-        }
+        },
       },
       // Replace with your project's social card
       navbar: {
@@ -187,8 +208,8 @@ const config = {
           },
           {
             href: 'https://github.com/thin-edge/thin-edge.io',
-            className: "header-github-link",
-            'aria-label': "GitHub repository",
+            className: 'header-github-link',
+            'aria-label': 'GitHub repository',
             position: 'right',
           },
         ],
@@ -225,13 +246,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: [
-          'bash',
-          'json5',
-          'log',
-          'toml',
-          'python',
-        ],
+        additionalLanguages: ['bash', 'json', 'json5', 'log', 'toml', 'python'],
       },
       algolia: {
         appId: 'VJGN4W1RS0',
