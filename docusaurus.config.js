@@ -23,7 +23,7 @@ const config = {
   markdown: {
     mermaid: true,
     // Use preprocessor to replace global variables
-    preprocessor: ({filePath, fileContent}) => {
+    preprocessor: ({ filePath, fileContent }) => {
       return fileContent.replaceAll('{{te}}', '**thin-edge.io**');
     },
   },
@@ -56,10 +56,7 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-  clientModules: [
-    // Prevent chrome warnings: Consider marking event handler as 'passive' to make the page more responsive
-    require.resolve('default-passive-events'),
-  ],
+  clientModules: [],
   headTags: [
     // Add permissions-policy to prevent chrome warnings
     // Example: Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'interest-cohort'.
