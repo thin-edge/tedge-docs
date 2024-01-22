@@ -19,6 +19,7 @@ const TAGS = {
   CONFIG: 'Configuration',
   SERVICE: 'Service',
   BOOTSTRAP: 'Bootstrap',
+  EXAMPLE: 'Example',
 };
 
 export interface IPlugin {
