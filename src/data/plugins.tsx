@@ -146,7 +146,7 @@ const PluginsList: IPlugin[] = [
 
   // Protocols
   {
-    name: 'modbus',
+    name: 'modbus-plugin',
     sourceUrl: 'https://github.com/thin-edge/modbus-plugin',
     packageUrl: 'https://github.com/thin-edge/modbus-plugin',
     description:
