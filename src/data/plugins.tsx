@@ -153,14 +153,14 @@ const PluginsList: IPlugin[] = [
     tags: [TAGS.PROTOCOLS],
   },
   {
-    name: 'OPC UA',
+    name: 'opcua-device-gateway',
     sourceUrl:
       'https://github.com/thin-edge/thin-edge.io_examples/tree/main/opcua-solution',
     packageUrl:
       'https://github.com/thin-edge/thin-edge.io_examples/tree/main/opcua-solution',
     description:
       'OPC UA Gateway example which uses the Cumulocity IoT [opcua-device-gateway](https://github.com/thin-edge/opcua-device-gateway-container) to connect to OPC UA Servers and thin-edge.io',
-    tags: [TAGS.PROTOCOLS],
+    tags: [TAGS.PROTOCOLS, TAGS.EXAMPLE],
   },
 
   // Software management plugins
