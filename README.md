@@ -89,3 +89,23 @@ Then verify the result by serving the files:
 ```sh
 just docs-container yarn serve
 ```
+
+## Community Plugin Documentation
+
+The docs also maintain a custom (React) component to display the list of Community Plugins in an interactive way, to make it easier for users to search for plugins which interest them. Each plugin includes a short description, and links to the repository code and the installable package (if applicable).The same plugin list will be visible in all displayed documentation version to increase their visibility to users.
+
+### Add or edit a plugin
+
+The list of plugins is sourced via a single [typescript file](./src/data/plugins.tsx) which makes it easier to maintain and keep consistent across all plugins.
+
+To add or edit a plugin use the following procedure:
+
+1. Fork the repo
+2. Create a new branch with a name relevant to your change
+3. Edit the [typescript file](./src/data/plugins.tsx) file and add the plugin to the array
+
+    **Notes**
+
+    * Add any relevant *tags* to the plugins to allow searching for the plugins based on a fixed list of keywords.
+
+4. Create a PR against the `main` branch of the upstream repository
