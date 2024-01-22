@@ -217,6 +217,14 @@ const PluginsList: IPlugin[] = [
     sourceUrl: 'https://github.com/thin-edge/tedge-management-ui',
     tags: [TAGS.UI],
   },
+  {
+    name: 'tedge-demo-container',
+    description:
+      'Demo container setup to showcase thin-edge.io and all its features',
+    sourceUrl: 'https://github.com/thin-edge/tedge-demo-container',
+    packageUrl: 'https://github.com/thin-edge/tedge-demo-container',
+    tags: [TAGS.EXAMPLE, TAGS.CONTAINER],
+  },
 ];
 
 // Sort plugins
