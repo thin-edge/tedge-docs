@@ -34,6 +34,7 @@ const PluginsList: IPlugin[] = [
   {
     name: 'rpi-pico-client',
     sourceUrl: 'https://github.com/thin-edge/rpi-pico-client',
+    packageUrl: 'https://github.com/thin-edge/rpi-pico-client',
     description:
       'Micropython agent (for microcontrollers) to connect to local thin-edge.io to manage devices like Raspberry Pi Pico W',
     tags: [TAGS.AGENT, TAGS.MICROCONTROLLER, TAGS.RASPBERRY_PI],
@@ -41,6 +42,7 @@ const PluginsList: IPlugin[] = [
   {
     name: 'python-tedge-agent',
     sourceUrl: 'https://github.com/thin-edge/python-tedge-agent',
+    packageUrl: 'https://github.com/thin-edge/python-tedge-agent',
     description:
       'Python3 agent to connect to local thin-edge.io to manage devices',
     tags: [TAGS.AGENT],
@@ -145,6 +147,7 @@ const PluginsList: IPlugin[] = [
   {
     name: 'modbus',
     sourceUrl: 'https://github.com/thin-edge/modbus-plugin',
+    packageUrl: 'https://github.com/thin-edge/modbus-plugin',
     description:
       'Modbus gateway to connect to modbus devices and publish to the cloud via thin-edge.io.',
     tags: [TAGS.PROTOCOLS],
@@ -152,6 +155,8 @@ const PluginsList: IPlugin[] = [
   {
     name: 'OPC UA',
     sourceUrl:
+      'https://github.com/thin-edge/thin-edge.io_examples/tree/main/opcua-solution',
+    packageUrl:
       'https://github.com/thin-edge/thin-edge.io_examples/tree/main/opcua-solution',
     description:
       'OPC UA Gateway example which uses the Cumulocity IoT [opcua-device-gateway](https://github.com/thin-edge/opcua-device-gateway-container) to connect to OPC UA Servers and thin-edge.io',
@@ -215,6 +220,7 @@ const PluginsList: IPlugin[] = [
     name: 'tedge-management-ui',
     description: 'Local UI to view and manage thin-edge.io',
     sourceUrl: 'https://github.com/thin-edge/tedge-management-ui',
+    packageUrl: 'https://github.com/thin-edge/tedge-management-ui',
     tags: [TAGS.UI],
   },
   {
