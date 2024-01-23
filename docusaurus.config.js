@@ -12,7 +12,7 @@ import tabBlocks from 'docusaurus-remark-plugin-tab-blocks';
 
 const docsDir = process.env.DOCS_DIR || 'docs';
 const domain = process.env.DOMAIN || 'https://thin-edge.github.io';
-const baseUrl = process.env.BASE_URL || '/';
+const baseUrl = process.env.BASE_URL || '/thin-edge.io/';
 const includeCurrentVersion = process.env.INCLUDE_CURRENT_VERSION || 'true';
 
 /** @type {import('@docusaurus/types').Config} */
