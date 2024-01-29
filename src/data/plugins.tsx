@@ -225,6 +225,16 @@ const PluginsList: IPlugin[] = [
     tags: [TAGS.UI],
   },
   {
+    name: 'cumulocity-remote-access-cloud-http-proxy',
+    description:
+      'A Cumulocity IoT microservice that allows to proxy HTTP requests through the cloud to an HTTP server running on a Cumulocity IoT connected device',
+    sourceUrl:
+      'https://github.com/SoftwareAG/cumulocity-remote-access-cloud-http-proxy',
+    packageUrl:
+      'https://github.com/SoftwareAG/cumulocity-remote-access-cloud-http-proxy',
+    tags: [TAGS.UI, TAGS.CUMULOCITY, TAGS.RUGPI, TAGS.NODE_RED],
+  },
+  {
     name: 'tedge-demo-container',
     description:
       'Demo container setup to showcase thin-edge.io and all its features',
