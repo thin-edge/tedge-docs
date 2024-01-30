@@ -272,6 +272,11 @@ const config = {
         contextualSearch: true,
         searchParameters: {},
       },
+      imageZoom: {
+        // Allow disabling image zoom on specific images
+        // by surrounding them in `_![image](image.png)_` or <em></em>
+        selector: '.markdown :not(em) > img',
+      },
     }),
 };
 
