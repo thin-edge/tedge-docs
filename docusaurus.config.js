@@ -15,6 +15,13 @@ const domain = process.env.DOMAIN || 'https://thin-edge.github.io';
 const baseUrl = process.env.BASE_URL || '/thin-edge.io/';
 const includeCurrentVersion = process.env.INCLUDE_CURRENT_VERSION || 'true';
 
+const substitutePlaceholders = (value, { bold = false } = {}) => {
+  if (bold) {
+    return value.replaceAll('%%te%%', '**thin-edge.io**');
+  }
+  return value.replaceAll('%%te%%', 'thin-edge.io');
+};
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Thin-edge',
@@ -24,7 +31,20 @@ const config = {
     mermaid: true,
     // Use preprocessor to replace global variables
     preprocessor: ({ filePath, fileContent }) => {
-      return fileContent.replaceAll('%%te%%', '**thin-edge.io**');
+      return substitutePlaceholders(fileContent, { bold: true });
+    },
+    parseFrontMatter: async (params) => {
+      // Reuse the default parser
+      const result = await params.defaultParseFrontMatter(params);
+
+      // Replace text placeholders
+      if (result.frontMatter.description) {
+        result.frontMatter.description = substitutePlaceholders(
+          result.frontMatter.description,
+          { bold: false },
+        );
+      }
+      return result;
     },
   },
   themes: ['@docusaurus/theme-mermaid'],
