@@ -24,7 +24,7 @@ const config = {
     mermaid: true,
     // Use preprocessor to replace global variables
     preprocessor: ({ filePath, fileContent }) => {
-      return fileContent.replaceAll('{{te}}', '**thin-edge.io**');
+      return fileContent.replaceAll('%%te%%', '**thin-edge.io**');
     },
   },
   themes: ['@docusaurus/theme-mermaid'],
