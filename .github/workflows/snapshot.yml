@@ -35,7 +35,7 @@ jobs:
             just checkout-version "$VERSION" "${{inputs.branch}}"
             git commit -am "Backporting snapshot for version $VERSION on branch"
           fi
-          git push origin
+          git push --set-upstream origin release-1.0.0
       - name: create pull request
         run: gh pr create -B main -H "$PR_BRANCH" --title "create snapshot for version $VERSION" --body "Release $VERSION"
         env:
