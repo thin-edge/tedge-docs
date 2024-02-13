@@ -1,0 +1,12 @@
+on:
+  push:
+    branches: [main]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: publish github pages
+        run: |
+          gh workflow run gh-pages.yml -R thin-edge/thin-edge.io
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_PAT }}

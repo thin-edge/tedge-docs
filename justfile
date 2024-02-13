@@ -45,9 +45,6 @@ checkout-version version="" branch="":
         SOURCE_REPO_INFO="$TAG"
     fi
 
-    echo "Creating list of versions to be included (only 1 is supported atm)"
-    printf '["%s"]' "$TAG"  > versions.json
-
     echo "Copying docs from $TAG"
     mkdir -p versioned_docs
     rm -rf "./versioned_docs/version-$TAG"
@@ -56,6 +53,10 @@ checkout-version version="" branch="":
 
     # Store marker info about the source repo so it is easier to trace
     printf '%s' "$SOURCE_REPO_INFO" > "./versioned_docs/version-$TAG/.version"
+
+    # Create versions
+    echo "Creating list of versions to be included (only 1 is supported atm)"
+    ls -1r versioned_docs | cut -d- -f2- | jq -s -R 'split("\n") | .[:-1]' -c  > versions.json
 
     echo "Creating versioned sidebars"
     mkdir -p versioned_sidebars

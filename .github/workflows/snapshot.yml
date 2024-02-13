@@ -1,0 +1,40 @@
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        type: string
+        required: true
+      branch:
+        description: |
+          Branch to take the snapshot from. Use to update docs for the current release by
+          taking the state from a branch rather than a tag
+        type: string
+        required: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{inputs.version}}
+      PR_BRANCH: release-${{inputs.version}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: extractions/setup-just@v1
+      - run: |
+          git config --global user.email "info@thin-edge.io"
+          git config --global user.name "Versioneer"
+          git checkout -b "$PR_BRANCH"
+          if [ -n "${{inputs.branch}}" ]; then
+            just checkout-version "$VERSION"
+            git commit -am "Create snapshot for version $VERSION"
+          else
+            just checkout-version "$VERSION" "${{inputs.branch}}"
+            git commit -am "Backporting snapshot for version $VERSION on branch"
+          fi
+          git push origin
+      - name: create pull request
+        run: gh pr create -B main -H "$PR_BRANCH" --title "create snapshot for version $VERSION" --body "Release $VERSION"
+        env:
+            GITHUB_TOKEN: ${{ secrets.ACTIONS_PAT }}
