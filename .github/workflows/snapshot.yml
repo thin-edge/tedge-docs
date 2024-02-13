@@ -34,7 +34,7 @@ jobs:
             just checkout-version "$VERSION"
             git commit -am "Create snapshot for version $VERSION"
           fi
-          git push --set-upstream origin release-1.0.0
+          git push --set-upstream origin "$PR_BRANCH"
       - name: create pull request
         run: gh pr create -B main -H "$PR_BRANCH" --title "create snapshot for version $VERSION" --body "Release $VERSION"
         env:
