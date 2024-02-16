@@ -29,9 +29,11 @@ jobs:
           git checkout -b "$PR_BRANCH"
           if [ -n "$SOURCE_BRANCH" ]; then
             just checkout-version "$VERSION" "$SOURCE_BRANCH"
+            git add -A .
             git commit -am "Backporting snapshot for version $VERSION on branch"  
           else
             just checkout-version "$VERSION"
+            git add -A .
             git commit -am "Create snapshot for version $VERSION"
           fi
           git push --set-upstream origin "$PR_BRANCH"
