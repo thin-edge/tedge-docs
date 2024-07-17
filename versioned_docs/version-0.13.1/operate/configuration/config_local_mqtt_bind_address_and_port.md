@@ -40,7 +40,7 @@ For example, this can be get as `ifconfig | grep inet` or set it to `0.0.0.0`
 This will make sure that all the mqtt clients use the newer port and the bind address that
 has been set once the device is connected to the cloud as in step 3.
 
-## Step 3: Verify the port and the bind address configured/set
+## Step 3: Verify the port and the bind address configured/set {#step3}
 
 Use the `tedge` command to print the mqtt port and bind address that has been set as below.
 
@@ -84,7 +84,7 @@ sudo tedge config unset mqtt.bind.port
 sudo tedge config unset mqtt.bind.address
 ```
 
-Once the port or the bind address is reverted to default, the [step 1](#Step-3:-Connect-the-thin-edge-device-to-cloud)
+Once the port or the bind address is reverted to default, the [step 1](#step3)
 and 3 has to be followed to use the default port or the default bind address.
 
 ## Error case
