@@ -5,6 +5,19 @@ sidebar_position: 2
 description: Connect %%te%% to Cumulocity IoT and publish telemetry data
 ---
 
+import UserContext from '@site/src/components/UserContext';
+import UserContextForm from '@site/src/components/UserContextForm';
+
+:::tip
+#### User Context {#user-context}
+
+You can customize the documentation and commands shown on this page by providing relevant settings which will be reflected in the instructions. It makes it even easier to explore and use %%te%%.
+
+<UserContextForm settings="DEVICE_ID,C8Y_URL,C8Y_USER" />
+
+The user context will be persisted in your web browser's local storage.
+:::
+
 The very first step to enable %%te%% is to connect your device to the cloud.
 * This is a 10 minutes operation to be done only once.
 * It establishes a permanent connection from your device to the cloud end-point.
@@ -36,9 +49,13 @@ To connect the device to the Cumulocity IoT, one needs to set the URL of your Cu
 
 Set the URL of your Cumulocity IoT tenant.
 
+<UserContext>
+
 ```sh
-sudo tedge config set c8y.url your-tenant.cumulocity.com
+sudo tedge config set c8y.url $C8Y_URL
 ```
+
+</UserContext>
 
 Set the path to the root certificate if necessary. The default is `/etc/ssl/certs`.
 
@@ -49,6 +66,33 @@ sudo tedge config set c8y.root_cert_path /etc/ssl/certs
 This will set the root certificate path of the Cumulocity IoT.
 In most of the Linux flavors, the certificate will be present in `/etc/ssl/certs`.
 If not found download it from [here](https://www.identrust.com/dst-root-ca-x3).
+
+### Custom domain
+
+If you are using the Cumulocity Iot [custom domain feature](https://cumulocity.com/docs/enterprise-tenant/customization/#domain-name), then you need to set two urls instead of one, as the HTTP and MQTT endpoints on custom domains are different because the custom domain only applies to the HTTP endpoint. The MQTT endpoint must point to the underlying Cumulocity IoT instance.
+
+For example, below shows setting the HTTP and MQTT endpoints:
+
+<UserContext>
+
+```sh
+tedge config set c8y.http "$C8Y_URL"
+tedge config set c8y.mqtt "t12345.cumulocity.com:8883"
+```
+
+</UserContext>
+
+:::tip
+If you have `curl` and `jq` installed, then you can check if you are using a custom domain by executing the following command. If the response includes a different domain than the url used in the curl command, then you are using a custom domain, and you should use the output to set the `c8y.mqtt` thin-edge.io setting instead.
+
+<UserContext>
+
+```sh
+curl -sfL https://$C8Y_URL/tenant/loginOptions | jq -r '.loginOptions[] | select(.loginRedirectDomain) | .loginRedirectDomain'
+```
+</UserContext>
+
+:::
 
 
 ## Connecting to Cumulocity server signed with self-signed certificate
@@ -65,12 +109,16 @@ This is the certificate chain of the server and not the device's certificate kep
 :::
 
 If the Cumulocity server's certificate chain file isn't available locally, it can be downloaded using a web browser or using some other
-third-party tools like openssl command as follows (to be adjusted based on your env):
+third-party tools like openssl command as follows:
+
+<UserContext>
 
 ```sh
-openssl s_client -connect <hostname>:<port> < /dev/null 2>/dev/null \
+openssl s_client -connect $C8Y_URL:443 < /dev/null 2>/dev/null \
 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'
 ```
+
+</UserContext>
 
 ## Create the certificate
 
@@ -81,9 +129,13 @@ This identifier will be used to uniquely identify your devices among others in y
 This identifier will be also used as the Common Name (CN) of the certificate.
 Indeed, this certificate aims to authenticate that this device is actually the device with that identity.
 
+<UserContext>
+
 ```sh
-sudo tedge cert create --device-id my-device
+sudo tedge cert create --device-id "$DEVICE_ID"
 ```
+
+</UserContext>
 
 ```text title="Output"
 Certificate was successfully created
@@ -95,14 +147,18 @@ You can then check the content of that certificate.
 sudo tedge cert show
 ```
 
+<UserContext>
+
 ```text title="Output"
 Device certificate: /etc/tedge/device-certs/tedge-certificate.pem
-Subject: CN=my-device, O=Thin Edge, OU=Test Device
-Issuer: CN=my-device, O=Thin Edge, OU=Test Device
+Subject: CN=$DEVICE_ID, O=Thin Edge, OU=Test Device
+Issuer: CN=$DEVICE_ID, O=Thin Edge, OU=Test Device
 Valid from: Tue, 09 Feb 2021 17:16:52 +0000
 Valid up to: Tue, 11 May 2021 17:16:52 +0000
 Thumbprint: CDBF4EC17AA02829CAC4E4C86ABB82B0FE423D3E
 ```
+
+</UserContext>
 
 You may notice that the issuer of this certificate is the device itself.
 This is a self-signed certificate.
@@ -122,17 +178,29 @@ This can be done:
   to your tenant "Device Management/Management/Trusted certificates".
 * or using the `tedge cert upload c8y` command.
 
+<UserContext>
+
 ```sh
-sudo tedge cert upload c8y --user "${C8Y_USER}"
+sudo tedge cert upload c8y --user "$C8Y_USER"
 ```
 
-```sh title="Example"
-sudo tedge cert upload c8y --user "john.smith@example.com"
-```
+</UserContext>
 
 ### Common errors
 
 Below shows some common errors that can be experienced when trying to upload the device certificate.
+
+#### InvalidCertificate(NotValidForName)
+
+If you receive the following error, then you are most likely using the [custom domain feature](https://cumulocity.com/docs/enterprise-tenant/customization/#domain-name), and should see the [custom domain instructions](#custom-domain) to configure the correct HTTP and MQTT endpoints.
+
+```sh
+ERROR: Custom { kind: InvalidData, error: InvalidCertificate(NotValidForName) }
+Error: failed to connect to Cumulocity cloud.
+
+Caused by:
+    Connection check failed
+```
 
 #### 401 - Unauthorized
 
@@ -143,7 +211,7 @@ Check the following items to help you diagnose the root cause of the problem:
 * Check the configured `c8y.url`. Copy/paste the url into a Web Browser to validate that it does open the intended Cumulocity IoT tenant
 * Check your username. The user/email is case-sensitive, so make sure the user matches your configured Cumulocity IoT user
 * Check your password. Use copy/paste to enter your password as this eliminates typos
-* Check that you are not using a SSO user. SSO users are not permitted to use the REST API calls which the `tedge cert upload c8y` command is using. Please create a new Cumulocity IoT user via the [Administration Pge](https://cumulocity.com/guides/users-guide/administration/#to-add-a-user)
+* Check that you are not using a SSO user. SSO users are not permitted to use the REST API calls which the `tedge cert upload c8y` command is using. Please create a new Cumulocity IoT user via the [Administration Page](https://cumulocity.com/guides/users-guide/administration/#to-add-a-user)
 
 
 #### 403 - Forbidden
