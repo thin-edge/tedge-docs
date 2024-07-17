@@ -30,7 +30,8 @@
     "react-dom": "^18.2.0",
     "react-markdown": "^9.0.1",
     "react-select": "^5.8.0",
-    "shell-quote": "^1.8.1"
+    "shell-quote": "^1.8.1",
+    "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.1.0",
