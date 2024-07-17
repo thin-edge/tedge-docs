@@ -99,7 +99,7 @@ That includes:
     * allows monitoring the health of devices
     * helps troubleshooting when problems with the device are reported
 
-[^1]: more details see appendix [Device Domain](#device-domain)
+[^1]: more details see appendix [Device Domain](#device-overview)
 
 ## Child-Devices
 
@@ -172,7 +172,7 @@ A **plugin** defines and implements a specific **contract** for all interactions
 
 # Appendix
 
-## Device Overview
+## Device Overview {#device-overview}
 
 **thin-edge** is designed to facilitate IoT functionality to resource constrained **devices**. The focus is on industrial OT **devices** or any other kind of embedded **devices**. It is not reduced to **devices** that are capable to install and run thin-edge, but includes also **devices** that need another _(gateway) device_ aside, that executes **thin-edge**.
 
