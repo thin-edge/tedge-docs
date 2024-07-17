@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { useLocalStorage } from "@uidotdev/usehooks";
+import { useLocalStorage } from 'usehooks-ts';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 function generateName(prefix='', len=10) {
   const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
   return prefix + genRanHex(len);
 }
 
-export default function UserContextForm(props={}) {
+function UserContextForm(props={}) {
   const {settings = ''} = props;
   const showKeys = `${settings}`.split(',');
 
@@ -124,3 +125,17 @@ export default function UserContextForm(props={}) {
     </div>
   );
 }
+
+// Wrap component in the BrowserOnly to prevent re-hydration issues
+// where the initial values from the local storage aren't accessible yet
+// which results in the values being ignored when the local storage becomes
+// available
+export default function UserContextFormBrowserOnly(props) {
+  return (
+    <BrowserOnly fallback={<div>Loading user context...</div>}>
+      {() => {
+        return <UserContextForm {...props} />;
+      }}
+    </BrowserOnly>
+  );
+};
