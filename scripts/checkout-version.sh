@@ -133,7 +133,7 @@ if [ "$REMOVE_OLD_VERSIONS" = 1 ]; then
     # Note: Use `sort -Vr` to sort versions naturally (e.g. 1.2.0 < 1.10.0)
     # and in reverse order (as the most recent should be kept)
     prev_major_version=
-    find versioned_docs -type d -depth 1 | sort -Vr |
+    find versioned_docs -type d -maxdepth 1 | sort -Vr |
         while read -r cur_path; do 
             cur_version=$(echo "$cur_path" | cut -d- -f2)
             major_version=$(echo "$cur_version" | cut -d. -f1)
@@ -148,7 +148,7 @@ fi
 
 # Create versions
 log "Creating list of versions to be included"
-find versioned_docs -type d -depth 1 | sort -Vr | cut -d- -f2 | jq -s -R 'split("\n") | .[:-1]' -c  > versions.json
+find versioned_docs -type d -maxdepth 1 | sort -Vr | cut -d- -f2 | jq -s -R 'split("\n") | .[:-1]' -c  > versions.json
 
 log "Creating versioned sidebars"
 mkdir -p versioned_sidebars
