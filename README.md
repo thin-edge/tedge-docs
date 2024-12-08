@@ -41,10 +41,10 @@ The instructions below detail how to build and serve the documentation.
     just init
 
     # Optional (if you want to include the last official docs as well)
-    just checkout-version
+    just checkout-version "<tag>"
     ```
 
-    You can also checkout a fork instead (rather than the main project)by providing the git url of the fork as the first positional argument.
+    You can also checkout a fork instead (rather than the main project) by providing the git url of the fork as the first positional argument.
 
     ```sh
     just project=https://github.com/myuser/thin-edge.io.git init
@@ -56,7 +56,7 @@ The instructions below detail how to build and serve the documentation.
     just docs
     ```
 
-    Alternatively you can start the doc
+    Alternatively you can start the docs
 
     ```sh
     just docs-container
