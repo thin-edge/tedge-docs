@@ -10,6 +10,10 @@ Check out the [online documentation](https://thin-edge.github.io/thin-edge.io) t
 
 ## Running docs in development
 
+**Pre-requisites**
+
+* [Node.js](https://nodejs.org/en) >= 20.x
+
 The instructions below detail how to build and serve the documentation.
 
 1. Clone the project and change directory to the project
@@ -19,7 +23,19 @@ The instructions below detail how to build and serve the documentation.
     cd tedge-docs
     ```
 
-2. Checkout the thin-edge.io source markdown files
+2. Enable Node.js corepack
+
+    ```sh
+    corepack enable
+    ```
+
+    If corepack is not installed, then you will have to install it using the following:
+
+    ```sh
+    npm install -g corepack
+    ```
+
+3. Checkout the thin-edge.io source markdown files
 
     ```sh
     just init
@@ -34,7 +50,7 @@ The instructions below detail how to build and serve the documentation.
     just project=https://github.com/myuser/thin-edge.io.git init
     ```
 
-3. Start the documentation (using a local dev server)
+4. Start the documentation (using a local dev server)
 
     ```sh
     just docs
@@ -50,7 +66,7 @@ The instructions below detail how to build and serve the documentation.
 
     * The thin-edge.io repo be cloned automatically in a sibling folder (on the same level as the `tedge-docs` project)
 
-4. You can now edit the thin-edge.io documents under the `docs/src` folder of the `thin-edge.io` repository. Any changes will be detected and the browser page will be refreshed automatically.
+5. You can now edit the thin-edge.io documents under the `docs/src` folder of the `thin-edge.io` repository. Any changes will be detected and the browser page will be refreshed automatically.
 
 ## Checkout a branch and treat it as a specific version
 
