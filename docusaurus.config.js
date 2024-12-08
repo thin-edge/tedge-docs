@@ -27,6 +27,11 @@ const config = {
   title: 'Thin-edge',
   tagline: 'The open edge framework for lightweight IoT devices',
   favicon: 'img/favicon.ico',
+  future: {
+    // Use new Rust based packaging tools like Rspack
+    // https://docusaurus.io/blog/releases/3.6
+    experimental_faster: true,
+  },
   markdown: {
     mermaid: true,
     // Use preprocessor to replace global variables
