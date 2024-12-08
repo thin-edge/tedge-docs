@@ -20,6 +20,7 @@ const TAGS = {
   TOOL: 'Tool',
   UI: 'UI',
   YOCTO: 'Yocto',
+  PKI: 'PKI',
 };
 
 export interface IPlugin {
@@ -47,6 +48,14 @@ const PluginsList: IPlugin[] = [
     description:
       'Python3 agent to connect to local thin-edge.io to manage devices',
     tags: [TAGS.AGENT],
+  },
+  {
+    name: 'freertos-esp32-client',
+    sourceUrl: 'https://github.com/thin-edge/freertos-esp32-client',
+    packageUrl: 'https://github.com/thin-edge/freertos-esp32-client',
+    description:
+      'thin-edge.io child device client to run on an esp32 microcontroller',
+    tags: [TAGS.AGENT, TAGS.MICROCONTROLLER],
   },
 
   // Configuration
@@ -121,6 +130,14 @@ const PluginsList: IPlugin[] = [
     tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI],
   },
   {
+    name: 'tedge-rugpi-core',
+    sourceUrl: 'https://github.com/thin-edge/tedge-rugpi-core',
+    packageUrl: 'https://github.com/thin-edge/tedge-rugpi-core',
+    description:
+      'thin-edge.io rugpi images/recipes used by the tedge-rugpi-image project',
+    tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI],
+  },
+  {
     name: 'meta-tedge-project',
     sourceUrl: 'https://github.com/thin-edge/meta-tedge-project',
     packageUrl: 'https://github.com/thin-edge/meta-tedge-project',
@@ -133,14 +150,6 @@ const PluginsList: IPlugin[] = [
     sourceUrl: 'https://github.com/thin-edge/meta-tedge',
     packageUrl: 'https://github.com/thin-edge/meta-tedge',
     description: 'Yocto Layer to build and install thin-edge.io from source',
-    tags: [TAGS.IMAGE, TAGS.YOCTO],
-  },
-  {
-    name: 'meta-tedge-bin',
-    sourceUrl: 'https://github.com/thin-edge/meta-tedge-bin',
-    packageUrl: 'https://github.com/thin-edge/meta-tedge-bin',
-    description:
-      'Yocto Layer to install thin-edge.io using the officially built binaries. This layer reduces the build time considering as it avoids having to build the Rust compiler and tooling.',
     tags: [TAGS.IMAGE, TAGS.YOCTO],
   },
 
@@ -190,6 +199,12 @@ const PluginsList: IPlugin[] = [
     description: 'Manage NodeRED flows',
     tags: [TAGS.SM_PLUGIN, TAGS.NODE_RED],
   },
+  {
+    name: 'tedge-archive-plugin',
+    description:
+      'thin-edge.io archive software management plugin for devices without any package managers',
+    tags: [TAGS.SM_PLUGIN],
+  },
 
   // Telemetry
   {
@@ -214,6 +229,20 @@ const PluginsList: IPlugin[] = [
       'Python based MQTT benchmarking package to test the throughput of the MQTT message on a target device',
     sourceUrl: 'https://github.com/thin-edge/tedge-benchmark',
     tags: [TAGS.TOOL, TAGS.BENCHMARK],
+  },
+  {
+    name: 'tedge-monit-setup',
+    description: 'thin-edge.io community plugin with sensible monit defaults',
+    sourceUrl: 'https://github.com/thin-edge/tedge-monit-setup',
+    packageUrl: 'https://github.com/thin-edge/tedge-monit-setup',
+    tags: [TAGS.TOOL],
+  },
+  {
+    name: 'tedge-collectd-setup',
+    description: 'thin-edge.io community plugin to install/setup collectd',
+    sourceUrl: 'https://github.com/thin-edge/tedge-collectd-setup',
+    packageUrl: 'https://github.com/thin-edge/tedge-collectd-setup',
+    tags: [TAGS.TOOL],
   },
 
   // UI
@@ -241,6 +270,47 @@ const PluginsList: IPlugin[] = [
     sourceUrl: 'https://github.com/thin-edge/tedge-demo-container',
     packageUrl: 'https://github.com/thin-edge/tedge-demo-container',
     tags: [TAGS.EXAMPLE, TAGS.CONTAINER],
+  },
+
+  // Deployments
+  {
+    name: 'tedge-standalone',
+    description:
+      'Run thin-edge.io as standalone without any init system and using static binaries include the MQTT broker',
+    sourceUrl: 'https://github.com/thin-edge/tedge-standalone',
+    packageUrl: 'https://github.com/thin-edge/tedge-standalone',
+    tags: [TAGS.IMAGE],
+  },
+  {
+    name: 'tedge-container-bundle',
+    description:
+      'thin-edge.io. s6-overlay container setup to run all the components in a single container',
+    sourceUrl: 'https://github.com/thin-edge/tedge-container-bundle',
+    packageUrl: 'https://github.com/thin-edge/tedge-container-bundle',
+    tags: [TAGS.IMAGE, TAGS.CONTAINER],
+  },
+  {
+    name: 'tedge-actia-tgur',
+    description: 'thin-edge.io integration for Actia TGUR devices',
+    sourceUrl: 'https://github.com/thin-edge/tedge-actia-tgur',
+    packageUrl: 'https://github.com/thin-edge/tedge-actia-tgur',
+    tags: [TAGS.IMAGE],
+  },
+  {
+    name: 'homebrew-tedge',
+    description: 'Homebrew tap to install thin-edge.io on MacOS',
+    sourceUrl: 'https://github.com/thin-edge/homebrew-tedge',
+    packageUrl: 'https://github.com/thin-edge/homebrew-tedge',
+    tags: [TAGS.IMAGE],
+  },
+
+  // PKI
+  {
+    name: 'tedge-pki-smallstep',
+    description: 'Local PKI integration with thin-edge.io using Smallstep',
+    sourceUrl: 'https://github.com/thin-edge/tedge-pki-smallstep',
+    packageUrl: 'https://github.com/thin-edge/tedge-pki-smallstep',
+    tags: [TAGS.PKI],
   },
 ];
 
