@@ -52,7 +52,7 @@ function UserContextForm(props={}) {
   useEffect(() => setShowContext(showContext), [showContext]);
 
   return (
-    <div>
+    <div className='user-context'>
     <button onClick={e => setShowContext(!showContext)} style={{'width': '100%'}}>Show/hide user context</button>
     <div className="card" style={{'display': showContext ? 'inherit': 'none'}}>
         <div className="card__body">
