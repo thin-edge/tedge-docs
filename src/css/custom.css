@@ -77,20 +77,21 @@ html[data-theme='dark'] .header-github-link:before {
   margin: 20px;
 }
 
-input {
+.user-context input {
+  /* TODO: Scope this to a specific plugin */
   margin-bottom: 1rem;
   width: 100%;
   font-size: 1rem;
   padding: 0.4rem;
 }
 
-input[type="text"] {
+.user-context input[type="text"] {
   height: 40px;
   padding: 0.5rem 1rem;
   border: 1px solid #999;
 }
 
-input[type="submit"] {
+.user-context input[type="submit"] {
   background-color: #000000;
   border: none;
   color: #fff;
@@ -99,17 +100,17 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-input:focus {
+.user-context input:focus {
   outline: none;
   border-color: #000000;
 }
 
-input[type="checkbox"] {
+.user-context input[type="checkbox"] {
   display: inline-block;
   width: auto;
 }
 
-button {
+.user-context button {
   border-radius: 4px;
   border-width: 1px;
   padding: 6px 18px;
