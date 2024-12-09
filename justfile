@@ -17,7 +17,7 @@ init:
 
 # Checkout docs from the last official release
 #
-# Note: The versioned docs are not commited to the project
+# Note: The versioned docs are not committed to the project
 # they are only copied during build time. This is to reduce the 'noise'
 # in the commit history.
 # See the docs for more info: https://docusaurus.io/docs/versioning
