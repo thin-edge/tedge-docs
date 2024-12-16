@@ -3,7 +3,7 @@ import CodeBlock from '@theme/CodeBlock';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 export default function UserContext(props={}) {
-  const {children={}, language="sh"} = props;
+  const {children={}, language="sh", title=""} = props;
   // Common
   const deviceId = useReadLocalStorage('DEVICE_ID', props.deviceId || 'tedge001');
 
@@ -30,7 +30,7 @@ export default function UserContext(props={}) {
   ;
   return (
     <div>
-      <CodeBlock language={language} >
+      <CodeBlock language={language} title={title}>
           {code}
       </CodeBlock>
     </div>
