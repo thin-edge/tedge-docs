@@ -138,18 +138,10 @@ const PluginsList: IPlugin[] = [
     tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI],
   },
   {
-    name: 'meta-tedge-project',
-    sourceUrl: 'https://github.com/thin-edge/meta-tedge-project',
-    packageUrl: 'https://github.com/thin-edge/meta-tedge-project',
-    description:
-      'Yocto Project to easily build multiple thin-edge.io images using different firmware update layers',
-    tags: [TAGS.IMAGE, TAGS.YOCTO],
-  },
-  {
     name: 'meta-tedge',
     sourceUrl: 'https://github.com/thin-edge/meta-tedge',
     packageUrl: 'https://github.com/thin-edge/meta-tedge',
-    description: 'Yocto Layer to build and install thin-edge.io from source',
+    description: 'Yocto Layer to build and install thin-edge.io from source (including kas project files which makes it easy to build Over-the-Air enabled images)',
     tags: [TAGS.IMAGE, TAGS.YOCTO],
   },
 
