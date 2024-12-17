@@ -10,6 +10,8 @@ export default function UserContext(props={}) {
   // Cumulocity IoT
   const c8yUrl = useReadLocalStorage('C8Y_URL', props.c8yUrl || 'example.eu-latest.com');
   const c8yUser = useReadLocalStorage('C8Y_USER', props.c8yUser || 'jimmy@thin-edge.com');
+  const c8yProfileName = useReadLocalStorage('C8Y_PROFILE_NAME', props.c8yProfileName || 'second');
+  const c8yProfileUrl = useReadLocalStorage('C8Y_PROFILE_URL', props.c8yProfileUrl || 'other.cumulocity.com');
 
   // AWS
   const awsUrl = useReadLocalStorage('AWS_URL', props.awsUrl || 'b1a1agbpo20syc.iot.us-east-1.amazonaws.com');
@@ -23,6 +25,8 @@ export default function UserContext(props={}) {
     .replace(/\$DEVICE_ID/g, deviceId)
     .replace(/\$C8Y_URL/g, c8yUrl)
     .replace(/\$C8Y_USER/g, c8yUser)
+    .replace(/\$C8Y_PROFILE_URL/g, c8yProfileUrl)
+    .replace(/\$C8Y_PROFILE_NAME/g, c8yProfileName)
     .replace(/\$AWS_URL/g, awsUrl)
     .replace(/\$AWS_REGION/g, awsRegion)
     .replace(/\$AWS_ACCOUNT_ID/g, awsAccountId)

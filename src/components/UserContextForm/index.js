@@ -25,6 +25,12 @@ function UserContextForm(props={}) {
   const [c8yUser, setC8yUser] = useLocalStorage('C8Y_USER', props.c8yUser || 'jimmy@thin-edge.com');
   useEffect(() => setC8yUser(c8yUser), [c8yUser]);
 
+  const [c8yProfileName, setC8yProfileName] = useLocalStorage('C8Y_PROFILE_NAME', props.c8yProfileName || 'second');
+  useEffect(() => setC8yProfileName(c8yProfileName), [c8yProfileName]);
+
+  const [c8yProfileUrl, setC8yProfileUrl] = useLocalStorage('C8Y_PROFILE_URL', props.c8yProfileUrl || 'other.cumulocity.com');
+  useEffect(() => setC8yProfileUrl(c8yProfileUrl), [c8yProfileUrl]);
+
   // AWS
   const [awsUrl, setAwsUrl] = useLocalStorage('AWS_URL', props.awsUrl || 'b1a1agbpo20syc.iot.us-east-1.amazonaws.com');
   useEffect(() => setAwsUrl(awsUrl), [awsUrl]);
@@ -83,6 +89,25 @@ function UserContextForm(props={}) {
               <input id="c8y-user" inputMode="text" value={c8yUser} onChange={(e) => setC8yUser(e.target.value)}></input>
               </div>
             </div>
+
+            <div className="row margin--xs" style={showStyle('C8Y_PROFILE_NAME')}>
+              <div className="col col--4">
+                <label htmlFor="c8y-profile">Profile name</label>
+              </div>
+              <div className="col col--6">
+              <input id="c8y-profile" inputMode="text" value={c8yProfileName} onChange={(e) => setC8yProfileName(e.target.value)}></input>
+              </div>
+            </div>
+
+            <div className="row margin--xs" style={showStyle('C8Y_PROFILE_URL')}>
+              <div className="col col--4">
+                <label htmlFor="c8y-profile-url">Second Cumulocity IoT URL</label>
+              </div>
+              <div className="col col--6">
+              <input id="c8y-profile-url" inputMode="text" value={c8yProfileUrl} onChange={(e) => setC8yProfileUrl(e.target.value)}></input>
+              </div>
+            </div>
+
 
             <div className="row margin--xs" style={showStyle('AWS_URL')}>
               <div className="col col--4">
