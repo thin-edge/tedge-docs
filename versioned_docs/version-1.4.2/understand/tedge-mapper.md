@@ -27,7 +27,7 @@ the message will be translated into a cloud-specific format.
 
 ## Cumulocity mapper
 
-The Cumulocity mapper translates [%%te%% JSON](thin-edge-json.md) into Cumulocity's [JSON via MQTT](https://cumulocity.com/guides/device-sdk/mqtt/#json).
+The Cumulocity mapper translates [%%te%% JSON](thin-edge-json.md) into Cumulocity's [JSON via MQTT](https://cumulocity.com/docs/smartrest/json-via-mqtt/).
 The translated messages are published on the topic `c8y/measurement/measurements/create` from where they are forwarded to Cumulocity.
 This mapper is launched by the `tedge connect c8y` command, and stopped by the `tedge disconnect c8y` command.
 
@@ -67,7 +67,7 @@ therefore, the Cumulocity mapper uses the user provided type from the topic, and
 In this case, the mapper uses the device's local timezone. If you want another timezone, specify the time filed in %%te%% JSON.
 
 (3) The mapper uses a measurement name ("temperature" in this example)
-as both a fragment type and a fragment series in [Cumulocity's measurements](https://cumulocity.com/guides/reference/measurements/#examples).
+as both a fragment type and a fragment series in [Cumulocity's measurements](https://cumulocity.com/docs/concepts/domain-model/#measurements).
 
 After the mapper publishes a message on the topic `c8y/measurement/measurements/create`,
 the message will be transferred to the topic `measurement/measurements/create` by [the MQTT bridge](../references/mappers/mqtt-topics.md).
@@ -123,7 +123,7 @@ The Azure IoT Hub Mapper processes a message in the following ways.
 
 1. Validates if it is a correct %%te%% JSON message or not.
 2. Validates the incoming message size is below 255 KB.
-[The size of all device-to-cloud messages must be up to 256 KB](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-d2c-guidance).
+[The size of all device-to-cloud messages must be up to 256 KB](https://learn.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-d2c-guidance).
 The mapper keeps 1 KB as a buffer for the strings added by Azure.
 3. (default) Adds a current timestamp if a timestamp is not included in an incoming message. To stop this behavior, please refer to the following instruction.
 
