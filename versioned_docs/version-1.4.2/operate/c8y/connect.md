@@ -1,7 +1,7 @@
 ---
 title: Connect
 tags: [Operate, Cloud]
-description: Connecting %%te%% to Cumulocity IoT
+description: Connecting %%te%% to Cumulocity
 ---
 
 import UserContext from '@site/src/components/UserContext';
@@ -59,7 +59,7 @@ in this case we are told to run `tedge config set c8y.url <value>`.
 ## Making the cloud trust the device
 
 The next step is to have the device certificate trusted by Cumulocity. This is done by uploading the certificate of the signee.
-You can upload the root certificate using the [Cumulocity UI](https://cumulocity.com/guides/users-guide/device-management/#trusted-certificates)
+You can upload the root certificate using the [Cumulocity UI](https://cumulocity.com/docs/device-management-application/managing-device-data/#managing-trusted-certificates)
 or with [`tedge cert upload`](../../references/cli/tedge-cert.md) command as described below.
 
 :::note

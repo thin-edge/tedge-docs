@@ -63,10 +63,10 @@ The event payload structure is the same, as described in the previous section.
 
 If the device is connected to some supported IoT cloud platform, an event that is triggered locally on %%te%% will be forwarded to the connected cloud platform as well.
 The mapping of %%te%% events data to its respective cloud-native representation will be done by the corresponding cloud mapper process.
-For example, if the device is connected to Cumulocity IoT cloud platform, the Cumulocity cloud mapper process will translate the %%te%% event JSON data to its equivalent Cumulocity SmartREST representation.
+For example, if the device is connected to Cumulocity cloud platform, the Cumulocity cloud mapper process will translate the %%te%% event JSON data to its equivalent Cumulocity SmartREST representation.
 
 :::caution
-As of now, event data mapping is supported only on Cumulocity IoT cloud platform.
+As of now, event data mapping is supported only on Cumulocity cloud platform.
 :::
 
 ### Cumulocity cloud data mapping
@@ -101,7 +101,7 @@ The Cumulocity JSON mapping of the same event would be as follows:
 Mapped events will be sent to Cumulocity via MQTT if the incoming %%te%% JSON event payload size is less than 16K bytes. If higher, HTTP will be used.
 :::
 
-Find more information about events data model in Cumulocity [here](https://cumulocity.com/guides/concepts/domain-model/#events).
+Find more information about events data model in Cumulocity [here](https://cumulocity.com/docs/concepts/domain-model/#events).
 
 ## Sending an event for a child/external device to the cloud
 

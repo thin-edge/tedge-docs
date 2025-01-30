@@ -14,7 +14,7 @@ Further details about this can be found in the %%te%% documentation at [Manage t
 
 #### Set up the Debian repository from which the Apama packages will be installed
 
-1. In the Cumulocity IoT tenant, open the **Device Management** app, go to the **Management** menu option and select the **Software repository**.
+1. In the Cumulocity tenant, open the **Device Management** app, go to the **Management** menu option and select the **Software repository**.
 2. Click **Add software** at the right of the top menu bar. 
 3. In the **ADD SOFTWARE** dialog enter the following details:
     - **Software**: apama-repo
@@ -82,7 +82,7 @@ Follow the instructions [here](https://github.com/thin-edge/thin-edge.io_example
 You can test if the project was successfully installed by running the following Apama command:
 
 ```sh
-/opt/softwareag/Apama/bin/apama_env engine_inspect -m
+/opt/cumulocity/Apama/bin/apama_env engine_inspect -m
 ```
 
 ```text title="Example Output"
