@@ -13,7 +13,7 @@ const TAGS = {
   OPERATION: 'Operation',
   PROTOCOLS: 'Protocols',
   RASPBERRY_PI: 'Raspberry Pi',
-  RUGPI: 'Rugpi',
+  RUGIX: 'Rugix',
   SERVICE: 'Service',
   SM_PLUGIN: 'Software Management Plugins',
   TELEMETRY: 'Telemetry',
@@ -122,19 +122,19 @@ const PluginsList: IPlugin[] = [
 
   // Images
   {
-    name: 'tedge-rugpi-image',
-    sourceUrl: 'https://github.com/thin-edge/tedge-rugpi-image',
-    packageUrl: 'https://github.com/thin-edge/tedge-rugpi-image',
+    name: 'tedge-rugix-image',
+    sourceUrl: 'https://github.com/thin-edge/tedge-rugix-image',
+    packageUrl: 'https://github.com/thin-edge/tedge-rugix-image',
     description:
-      'Build Raspberry Pi images with in-built support for OS updates using thin-edge.io and [Rugpi](https://github.com/silitics/rugpi)',
+      'Build Raspberry Pi images with in-built support for OS updates using thin-edge.io and [Rugix](https://github.com/silitics/rugix)',
     tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI],
   },
   {
-    name: 'tedge-rugpi-core',
-    sourceUrl: 'https://github.com/thin-edge/tedge-rugpi-core',
-    packageUrl: 'https://github.com/thin-edge/tedge-rugpi-core',
+    name: 'tedge-rugix-core',
+    sourceUrl: 'https://github.com/thin-edge/tedge-rugix-core',
+    packageUrl: 'https://github.com/thin-edge/tedge-rugix-core',
     description:
-      'thin-edge.io rugpi images/recipes used by the tedge-rugpi-image project',
+      'thin-edge.io rugix images/recipes used by the tedge-rugix-image project',
     tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI],
   },
   {
@@ -253,7 +253,7 @@ const PluginsList: IPlugin[] = [
       'https://github.com/SoftwareAG/cumulocity-remote-access-cloud-http-proxy',
     packageUrl:
       'https://github.com/SoftwareAG/cumulocity-remote-access-cloud-http-proxy',
-    tags: [TAGS.UI, TAGS.CUMULOCITY, TAGS.RUGPI, TAGS.NODE_RED],
+    tags: [TAGS.UI, TAGS.CUMULOCITY, TAGS.RUGIX, TAGS.NODE_RED],
   },
   {
     name: 'tedge-demo-container',
