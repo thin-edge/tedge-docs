@@ -250,9 +250,9 @@ const PluginsList: IPlugin[] = [
     description:
       'A Cumulocity IoT microservice that allows to proxy HTTP requests through the cloud to an HTTP server running on a Cumulocity IoT connected device',
     sourceUrl:
-      'https://github.com/SoftwareAG/cumulocity-remote-access-cloud-http-proxy',
+      'https://github.com/Cumulocity-IoT/cumulocity-remote-access-cloud-http-proxy',
     packageUrl:
-      'https://github.com/SoftwareAG/cumulocity-remote-access-cloud-http-proxy',
+      'https://github.com/Cumulocity-IoT/cumulocity-remote-access-cloud-http-proxy',
     tags: [TAGS.UI, TAGS.CUMULOCITY, TAGS.RUGIX, TAGS.NODE_RED],
   },
   {
