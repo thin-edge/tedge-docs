@@ -262,7 +262,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Software AG.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Cumulocity GmbH.`,
       },
       metadata: [
         {
