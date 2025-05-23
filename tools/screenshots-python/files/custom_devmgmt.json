@@ -1,0 +1,21 @@
+{
+    "name": "custom_devmgmt",
+    "type": "c8y_SmartRest2Template",
+    "com_cumulocity_model_smartrest_csv_CsvSmartRestTemplate": {
+        "requestTemplates": [],
+        "responseTemplates": [
+            {
+                "msgId": "dm101",
+                "condition": "set_wifi",
+                "base": "set_wifi",
+                "name": "set_wifi",
+                "pattern": [
+                    "name",
+                    "ssid",
+                    "type"
+                ]
+            }
+        ]
+    },
+    "__externalId": "custom_devmgmt"
+}
