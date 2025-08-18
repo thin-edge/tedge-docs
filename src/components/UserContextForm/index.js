@@ -22,6 +22,9 @@ function UserContextForm(props={}) {
     setC8yUrl(`${url}`.replace(/^https?:\/\//i, ''))
   };
 
+  const [c8yTenantId, setC8yTenantId] = useLocalStorage('C8Y_TENANT_ID', props.c8yTenantId || 't12345678');
+  useEffect(() => setC8yTenantId(c8yTenantId), [c8yTenantId]);
+
   const [c8yUser, setC8yUser] = useLocalStorage('C8Y_USER', props.c8yUser || 'jimmy@thin-edge.com');
   useEffect(() => setC8yUser(c8yUser), [c8yUser]);
 
@@ -59,8 +62,8 @@ function UserContextForm(props={}) {
 
   return (
     <div className='user-context'>
-    <button onClick={e => setShowContext(!showContext)} style={{'width': '100%'}}>Show/hide user context</button>
-    <div className="card" style={{'display': showContext ? 'inherit': 'none'}}>
+      <button onClick={e => setShowContext(!showContext)} style={{'width': '100%'}}>Show/hide user context</button>
+      <div className="card" style={{'display': showContext ? 'inherit': 'none'}}>
         <div className="card__body">
           <div className='container'>
             <div className="row margin--xs" style={showStyle('DEVICE_ID')}>
@@ -81,12 +84,21 @@ function UserContextForm(props={}) {
               </div>
             </div>
 
+            <div className="row margin--xs" style={showStyle('C8Y_TENANT_ID')}>
+              <div className="col col--4">
+                <label htmlFor="c8y-tenant-id">Cumulocity IoT Tenant ID</label>
+              </div>
+              <div className="col col--6">
+                <input id="c8y-tenant-id" inputMode="text" value={c8yTenantId} onChange={(e) => setC8yTenantId(e.target.value)}></input>
+              </div>
+            </div>
+
             <div className="row margin--xs" style={showStyle('C8Y_USER')}>
               <div className="col col--4">
                 <label htmlFor="c8y-user">Cumulocity IoT User</label>
               </div>
               <div className="col col--6">
-              <input id="c8y-user" inputMode="text" value={c8yUser} onChange={(e) => setC8yUser(e.target.value)}></input>
+                <input id="c8y-user" inputMode="text" value={c8yUser} onChange={(e) => setC8yUser(e.target.value)}></input>
               </div>
             </div>
 
@@ -95,7 +107,7 @@ function UserContextForm(props={}) {
                 <label htmlFor="c8y-profile">Profile name</label>
               </div>
               <div className="col col--6">
-              <input id="c8y-profile" inputMode="text" value={c8yProfileName} onChange={(e) => setC8yProfileName(e.target.value)}></input>
+                <input id="c8y-profile" inputMode="text" value={c8yProfileName} onChange={(e) => setC8yProfileName(e.target.value)}></input>
               </div>
             </div>
 
@@ -104,7 +116,7 @@ function UserContextForm(props={}) {
                 <label htmlFor="c8y-profile-url">Second Cumulocity IoT URL</label>
               </div>
               <div className="col col--6">
-              <input id="c8y-profile-url" inputMode="text" value={c8yProfileUrl} onChange={(e) => setC8yProfileUrl(e.target.value)}></input>
+                <input id="c8y-profile-url" inputMode="text" value={c8yProfileUrl} onChange={(e) => setC8yProfileUrl(e.target.value)}></input>
               </div>
             </div>
 
@@ -114,7 +126,7 @@ function UserContextForm(props={}) {
                 <label htmlFor="aws-url">AWS URL</label>
               </div>
               <div className="col col--6">
-              <input id="aws-url" inputMode="text" value={awsUrl} onChange={(e) => setAwsUrl(e.target.value)}></input>
+                <input id="aws-url" inputMode="text" value={awsUrl} onChange={(e) => setAwsUrl(e.target.value)}></input>
               </div>
             </div>
 
@@ -123,7 +135,7 @@ function UserContextForm(props={}) {
                 <label htmlFor="aws-region">AWS Region</label>
               </div>
               <div className="col col--6">
-              <input id="aws-region" inputMode="text" value={awsRegion} onChange={(e) => setAwsRegion(e.target.value)}></input>
+                <input id="aws-region" inputMode="text" value={awsRegion} onChange={(e) => setAwsRegion(e.target.value)}></input>
               </div>
             </div>
 
@@ -132,7 +144,7 @@ function UserContextForm(props={}) {
                 <label htmlFor="aws-account-id">AWS Account ID</label>
               </div>
               <div className="col col--6">
-              <input id="aws-account-id" inputMode="text" value={awsAccountId} onChange={(e) => setAwsAccountId(e.target.value)}></input>
+                <input id="aws-account-id" inputMode="text" value={awsAccountId} onChange={(e) => setAwsAccountId(e.target.value)}></input>
               </div>
             </div>
 
@@ -141,7 +153,7 @@ function UserContextForm(props={}) {
                 <label htmlFor="aws-account-id">Azure URL</label>
               </div>
               <div className="col col--6">
-              <input id="aws-account-id" inputMode="text" value={azureUrl} onChange={(e) => setAzureUrl(e.target.value)}></input>
+                <input id="aws-account-id" inputMode="text" value={azureUrl} onChange={(e) => setAzureUrl(e.target.value)}></input>
               </div>
             </div>
           </div>
