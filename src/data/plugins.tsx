@@ -127,7 +127,7 @@ const PluginsList: IPlugin[] = [
     packageUrl: 'https://github.com/thin-edge/tedge-rugix-image',
     description:
       'Build Raspberry Pi images with in-built support for OS updates using thin-edge.io and [Rugix](https://github.com/silitics/rugix)',
-    tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI],
+    tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI, TAGS.RUGIX],
   },
   {
     name: 'tedge-rugix-core',
@@ -135,7 +135,7 @@ const PluginsList: IPlugin[] = [
     packageUrl: 'https://github.com/thin-edge/tedge-rugix-core',
     description:
       'thin-edge.io rugix images/recipes used by the tedge-rugix-image project',
-    tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI],
+    tags: [TAGS.IMAGE, TAGS.RASPBERRY_PI, TAGS.RUGIX],
   },
   {
     name: 'meta-tedge',
