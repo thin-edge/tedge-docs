@@ -31,22 +31,39 @@ to private key stored in the HSM (a step that depends on the actual key).
 
 This feature has the following related configuration options:
 
+The options below are used to configure the _P11 provider_, a component which directly interacts
+with PKCS 11 devices and makes them available to tedge and other subcomponents, as well as to select
+the provider that tedge will use.
+
+There are 2 providers:
+
+- `module`: tedge will load the a P11 library directly. Can be used when PKCS 11 cryptographic
+  tokens are directly reachable
+- `socket`: tedge will connect to [`tedge-p11-server`](../references/tedge-p11-server.md) proxy via
+  a UNIX socket. This can be used when cryptographic tokens are not accessible from `tedge`, for
+  example when running inside an isolated container.
+
+Settings like `cryptoki.uri` and `cryptoki.pin` are the default values that the provider will use if
+a consumer does not provide them. In practice, this is only relevant to `tedge-p11-server` provider,
+which runs in a separate process and can handle many clients. If desired, it can be configured to
+use a default pin or limit the scope of tokens available to clients.
+
 ```sh command="tedge config list --doc device.cryptoki" title="tedge config list --doc device.cryptoki"
-       device.cryptoki.mode  Whether to use a Hardware Security Module for authenticating the MQTT connection with the cloud.  "off" to not use the HSM, "module" to use the provided cryptoki dynamic module, "socket" to access the HSM via tedge-p11-server signing service.
+       device.cryptoki.mode  Whether to use a Hardware Security Module for authenticating the MQTT connection with the cloud.  "off" to not use the HSM, "module" to use the provided cryptoki dynamic module, "socket" to access the HSM via tedge-p11-server signing service. 
                              Examples: off, module, socket
-
-device.cryptoki.module_path  A path to the PKCS#11 module used for interaction with the HSM.  Needs to be set when `device.cryptoki.mode` is set to `module`.
+device.cryptoki.module_path  A path to the PKCS#11 module used for interaction with the HSM.  Needs to be set when `device.cryptoki.mode` is set to `module`. 
                              Example: /usr/lib/x86_64-linux-gnu/opensc-pkcs11.so
-
-        device.cryptoki.pin  Pin value for logging into the HSM.
+        device.cryptoki.pin  A default User PIN value for logging into the PKCS11 token.  May be overridden on a per-key basis using device.key_pin config setting. 
                              Example: 123456
-
-        device.cryptoki.uri  A URI of the token/object to be used by tedge-p11-server.  See RFC #7512.
+        device.cryptoki.uri  A URI of the token/object to be used by tedge-p11-server.  If set, tedge-p11-server will by default use this URI to select a key for signing if a client does not provide its URI in the request. If the client provides the URI, then the attributes of this server URI will be used as a base onto which client-provided URI attributes will be appended, potentially limiting the scope of keys or tokens that can be used by the clients.  For example, if `cryptoki.uri=pkcs11:token=token1` and `device.key_uri=pkcs11:token2;object=key1`, `tedge-p11-server` will use URI `pkcs11:token1;object=key1`.  For more information about PKCS11 URIs, see RFC7512. 
                              Example: pkcs11:token=my-pkcs11-token;object=my-key
-
-device.cryptoki.socket_path  A path to the tedge-p11-server socket.  Needs to be set when `device.cryptoki.mode` is set to `socket`.
+device.cryptoki.socket_path  A path to the tedge-p11-server socket.  Needs to be set when `device.cryptoki.mode` is set to `socket`. 
                              Example: /run/tedge-p11-server/tedge-p11-server.sock
 ```
+
+The options below are used by the consumer (tedge) to ask `tedge-p11-server` for a specific key. You
+can use different keys for different connection profiles. `tedge-p11-server` may limit what keys and
+tokens are available.
 
 ```sh command="tedge config list --doc key_uri" title="tedge config list --doc key_uri"
     device.key_uri  A PKCS#11 URI of the private key.  See RFC #7512.
@@ -60,6 +77,20 @@ c8y.device.key_uri  A PKCS#11 URI of the private key.  See RFC #7512.
 
 aws.device.key_uri  A PKCS#11 URI of the private key.  See RFC #7512.
                     Example: pkcs11:model=PKCS%2315%20emulated
+```
+
+The options below are used by the consumer (tedge) to use a given PIN with a given key, instead of
+using a default PIN that `tedge-p11-server` is configured to use.
+
+```sh command="tedge config list --doc key_pin" title="tedge config list --doc key_pin"
+    device.key_pin  User PIN value for logging into the PKCS#11 token provided by the consumer.  This differs from cryptoki.pin in that cryptoki.pin is used by PKCS#11 provider, e.g. tedge-p11-server as a default PIN for all tokens, but device.key_pin is the PIN provided by the consumer (tedge) with a given `key_uri`.  In practice, this can be used to define separate keys and separate PINs for different connection profiles.
+                    Examples: 123456, my-pin
+c8y.device.key_pin  User PIN value for logging into the PKCS#11 token provided by the consumer.  This differs from cryptoki.pin in that cryptoki.pin is used by PKCS#11 provider, e.g. tedge-p11-server as a default PIN for all tokens, but device.key_pin is the PIN provided by the consumer (tedge) with a given `key_uri`.  In practice, this can be used to define separate keys and separate PINs for different connection profiles.
+                    Examples: 123456, my-pin
+ az.device.key_pin  User PIN value for logging into the PKCS#11 token provided by the consumer.  This differs from cryptoki.pin in that cryptoki.pin is used by PKCS#11 provider, e.g. tedge-p11-server as a default PIN for all tokens, but device.key_pin is the PIN provided by the consumer (tedge) with a given `key_uri`.  In practice, this can be used to define separate keys and separate PINs for different connection profiles.
+                    Examples: 123456, my-pin
+aws.device.key_pin  User PIN value for logging into the PKCS#11 token provided by the consumer.  This differs from cryptoki.pin in that cryptoki.pin is used by PKCS#11 provider, e.g. tedge-p11-server as a default PIN for all tokens, but device.key_pin is the PIN provided by the consumer (tedge) with a given `key_uri`.  In practice, this can be used to define separate keys and separate PINs for different connection profiles.
+                    Examples: 123456, my-pin
 ```
 
 ## Setup guide
@@ -250,3 +281,122 @@ will then be used to select a token, but the key will be selected automatically,
 key may be wrong if there are multiple to choose from. Also if the URI contain attributes that
 identify a key, but doesn't contain attributes that identify a token, still the first token will be
 selected, even if another token contains the intended key.
+
+## Key generation
+
+```sh command="tedge cert create-key-hsm --help" title="tedge cert create-key-hsm --help"
+Generate a new keypair on the PKCS #11 token and select it to be used.
+
+Can be used to generate a keypair on the TOKEN. If TOKEN argument is not provided, the command prints the available tokens.
+
+If TOKEN is provided, the command generates an RSA or an ECDSA keypair on the token. When using RSA, `--bits` is used to set the size of the key, when using ECDSA, `--curve` is used.
+
+After the key is generated, tedge config is updated to use the new key using `device.key_uri` property. Depending on the selected cloud, we use `device.key_uri` setting for that cloud, e.g. `create-key-hsm c8y` will write to `c8y.device.key_uri`.
+
+Usage: tedge cert create-key-hsm [OPTIONS] [TOKEN] [COMMAND]
+
+Commands:
+  c8y   
+  az    
+  aws   
+  help  Print this message or the help of the given subcommand(s)
+
+Arguments:
+  [TOKEN]
+          The URI of the token where the keypair should be created.
+          
+          If this argument is missing, a list of available initialized tokens will be shown. The token needs to be initialized to be able to generate keys.
+
+Options:
+      --config-dir <CONFIG_DIR>
+          [env: TEDGE_CONFIG_DIR, default: /etc/tedge]
+
+      --label <LABEL>
+          Human readable description (CKA_LABEL attribute) for the key
+          
+          [default: tedge]
+
+      --debug
+          Turn-on the DEBUG log level.
+          
+          If off only reports ERROR, WARN, and INFO, if on also reports DEBUG
+
+      --id <ID>
+          Key identifier for the keypair (CKA_ID attribute).
+          
+          If provided and no object exists on the token with the same ID, this will be the ID of the new keypair. If an object with this ID already exists, the operation will return an error. If not provided, a random ID will be generated and used by the keypair.
+          
+          The id shall be provided as a sequence of hex digits without `0x` prefix, optionally separated by spaces, e.g. `--id 010203` or `--id "01 02 03"`.
+
+      --log-level <LOG_LEVEL>
+          Configures the logging level.
+          
+          One of error/warn/info/debug/trace. Logs with verbosity lower or equal to the selected level will be printed, i.e. warn prints ERROR and WARN logs and trace prints logs of all levels.
+          
+          Overrides `--debug`
+
+      --type <TYPE>
+          The type of the key
+          
+          [default: ecdsa]
+          [possible values: rsa, ecdsa]
+
+      --bits <BITS>
+          The size of the RSA keys in bits. Should only be used with --type rsa
+          
+          [default: 2048]
+          [possible values: 2048, 3072, 4096]
+
+      --curve <CURVE>
+          The curve (size) of the ECDSA key. Should only be used with --type ecdsa
+          
+          [default: p256]
+          [possible values: p256, p384]
+
+      --pin <PIN>
+          User PIN value for logging into the PKCS #11 token.
+          
+          This flag can be used to provide a PIN when creating a new key without needing to update tedge-config, which can be helpful when initializing keys on new tokens.
+          
+          Note that in contrast to the URI of the key, which will be written to tedge-config automatically when the keypair is created, PIN will not be written automatically and may be needed to written manually using tedge config set (if not using tedge-p11-server with the correct default PIN).
+
+      --outfile-pubkey <OUTFILE_PUBKEY>
+          Path where public key will be saved when a keypair is generated
+
+  -h, --help
+          Print help (see a summary with '-h')
+```
+
+`tedge cert create-key-hsm` command generates a new keypair on the PKCS #11 token.
+
+1. Configure cryptoki in `module` or `socket` mode as described in previous sections.
+2. Run the `tedge cert create-key-hsm` command. You'll need to provide key type, size and label of the
+   key object.
+
+    ```sh
+    tedge cert create-key-hsm --type ecdsa --curve p256 --label my-key
+    ```
+
+    ```sh title="Output"
+    New keypair was successfully created.
+    Key URI: pkcs11:model=SoftHSM%20v2;manufacturer=SoftHSM%20project;serial=a30ed1ca6244fc5f;token=test-token;id=%51%05%87%75%6F%B7%28%EC%5E%5D%1F%B8%EB%CF%FD%96%B7%E4%28%B6;object=my-key
+    Public key:
+    -----BEGIN PUBLIC KEY-----
+    BEsjmiXDdko90IDdjlAb/bWyTf6kd6S+/KPlj2Yd3zjHZe54evLyHJ1e8dSDhpy7
+    2Tcml9ZcHWBHA+MM0NFAbaw=
+    -----END PUBLIC KEY-----
+
+
+    Value of `device.key_uri` was updated to point to the new key
+    ```
+
+3. Run `tedge config get device.key_uri` to confirm tedge will use the new key.
+
+    ```sh
+    tedge config get device.key_uri
+    ```
+    pkcs11:model=SoftHSM%20v2;manufacturer=SoftHSM%20project;serial=a30ed1ca6244fc5f;token=test-token;id=%51%05%87%75%6F%B7%28%EC%5E%5D%1F%B8%EB%CF%FD%96%B7%E4%28%B6;object=my-key
+    ```sh title="Output"
+
+Now you're free to use the new key to either request a signed certificate using a CSR or to create a
+self-signed certificate.

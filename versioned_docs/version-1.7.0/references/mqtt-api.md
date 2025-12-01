@@ -247,6 +247,7 @@ The following is an overview of the channel categories which are available.
 | cmd      | Commands             |
 | twin     | Entity twin metadata |
 | status   | Service status       |
+| signal   | Signals              |
 
 
 ## Entity registration
@@ -442,7 +443,7 @@ so that it can process them.
 #### Publish to the main device
 
 ```sh te2mqtt formats=v1
-tedge mqtt pub -r 'te/device/main///m/environment' '{
+tedge mqtt pub 'te/device/main///m/environment' '{
   "temperature": 23.4
 }'
 ```
@@ -450,7 +451,7 @@ tedge mqtt pub -r 'te/device/main///m/environment' '{
 If the there is no measurement type, then the type can be left empty, but it must have the trailing slash `/` (so that the number of topic segments is the same).
 
 ```sh te2mqtt formats=v1
-tedge mqtt pub -r 'te/device/main///m/' '{
+tedge mqtt pub 'te/device/main///m/' '{
   "temperature": 23.4
 }'
 ```
@@ -458,7 +459,7 @@ tedge mqtt pub -r 'te/device/main///m/' '{
 #### Publish to a child device
 
 ```sh te2mqtt formats=v1
-tedge mqtt pub -r 'te/device/child01///m/environment' '{
+tedge mqtt pub 'te/device/child01///m/environment' '{
   "temperature": 23.4
 }'
 ```
@@ -466,7 +467,7 @@ tedge mqtt pub -r 'te/device/child01///m/environment' '{
 #### Publish to a service on the main device
 
 ```sh te2mqtt formats=v1
-tedge mqtt pub -r 'te/device/main/service/nodered/m/environment' '{
+tedge mqtt pub 'te/device/main/service/nodered/m/environment' '{
   "temperature": 23.4
 }'
 ```
@@ -492,12 +493,12 @@ tedge mqtt sub 'te/device/main/service/+/m/memory'
 #### Publish to a service on a child device
 
 ```sh te2mqtt formats=v1
-tedge mqtt pub -r 'te/device/child01/service/nodered/m/environment' '{
+tedge mqtt pub 'te/device/child01/service/nodered/m/environment' '{
   "temperature": 23.4
 }'
 ```
 
-### Telemetry type metadata
+### Telemetry metadata  {#telemetry-metadata}
 
 The data types also may have additional metadata associated with it,
 which can be added/updated by publishing to `/meta` subtopics of those data types.
@@ -506,15 +507,41 @@ can be updated by publishing the following message:
 
 ```sh te2mqtt formats=v1
 tedge mqtt pub -r te/device/main///m/battery_reading/meta '{
-  "units": {
-    "temperature": "°C",
-    "voltage": "V",
-    "current": "A"
-  }
+  "temperature": { "unit": "°C", "precision": "±0.1°C" },
+  "voltage": { "unit": "V", "min": 0, "max": 20 },
+  "current": { "unit": "A" }
 }'
 ```
 
-The metadata fields supported by each data type will be defined in detail later.
+These free-form metadata fields are used to interpret the values published on the associated topic.
+
+Continuing the example with the following measurement:
+
+```sh te2mqtt formats=v1
+tedge mqtt pub te/device/main///m/battery_reading '{
+  "temperature": 25,
+  "voltage": 20,
+  "current": 5,
+  "ttl": 1
+}'
+```
+
+The metadata for *battery_reading* are used by the Cumulocity mapper, to attach units to these values:
+
+```json
+{
+  "temperature": {"temperature":{"value":25.0,"unit":"°C"}},
+  "voltage":{"voltage":{"value":20.0,"unit":"V"}},
+  "current":{"current":{"value":5.0,"unit":"A"}},
+  "ttl":{"ttl":{"value":1.0}},
+  "time":"2025-09-05T13:47:23.818993647Z",
+  "type":"battery_reading"
+}
+```
+
+Note that:
+- Metadata can be missing. The Cumulocity mapper doesn't mandate units and publishes the *ttl* value even if no units is known.
+- Extra metadata can be added. The Cumulocity mapper only uses the units and ignores all other metadata fields.
 
 ## Twin metadata
 
@@ -647,6 +674,74 @@ tedge mqtt pub -r te/device/main///cmd/config_snapshot '{
 }'
 ```
 
+## Signals
+
+Signals are stateless, making them ideal for one-shot requests where the caller does not need any confirmation. However, it is up for the entity to define if and how the signal is processed.
+
+The topic scheme for signals can be visualized using the diagram below.
+
+<p align="center">
+
+```mermaid
+graph LR
+  te --/--- identifier --/--- signal
+  subgraph root
+    te
+  end
+
+  subgraph identifier
+    identifier2["&lt;identifier&gt;"]
+  end
+
+  subgraph signal
+    direction LR
+    signal_node["signal"] --/--- signal_type["&lt;signal_type&gt;"]
+  end
+```
+
+</p>
+
+Where the signal segments are describe as follows:
+
+| Segment             | Description                                                                                                                      |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| &lt;identifier&gt;  | The [identifier](#group-identifier) (e.g. device/service) associated with the signal.                                            |
+| &lt;signal_type&gt; | Signal type. Each signal can define its own payload schema to allow signals to have parameters related to the signal's function. |
+
+### Signal examples
+
+The following table details some example signal types which are supported by %%te%%.
+
+| Signal Type     | Example Topic                            |
+|-----------------|------------------------------------------|
+| sync            | `te/<identifier>/signal/sync`            |
+| sync_log_upload | `te/<identifier>/signal/sync_log_upload` |
+
+The signal would be interpreted differently based on the target entity.
+
+:::note
+The signal channel is currently in development.
+We plan to add support for more signal types in the future.
+:::
+
+### Examples: With default device/service topic semantics
+
+#### Signal to the Cumulocity mapper service
+
+Signal to request the supported operations of the `tedge-mapper-c8y` service:
+
+```sh te2mqtt formats=v1
+tedge mqtt pub te/device/main/service/tedge-mapper-c8y/signal/sync '{}'
+```
+
+#### Signal to the agent service
+
+Signal to refresh the `log_upload` command metadata (supported log types) of the `tedge-agent` service:
+
+```sh te2mqtt formats=v1
+tedge mqtt pub te/device/main/service/tedge-agent/signal/sync_log_upload '{}'
+```
+
 ## Health check
 
 Services can publish their health status as follows:
@@ -680,4 +775,3 @@ tedge mqtt pub -r te/device/main/service/tedge-agent/status/health '{
   "status": "down"
 }'
 ```
-
