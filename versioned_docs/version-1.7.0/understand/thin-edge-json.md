@@ -162,6 +162,44 @@ and hence must not be used as measurement keys:
 | --- | --- |
 | time | Timestamp in ISO 8601 string format or as a unix timestamp (in seconds) |
 
+### Measurement properties
+
+A measurement can contain additional properties to contextualize the measurement.
+
+These properties are free-form and only have to be grouped under a `properties` sub-object.
+
+```sh te2mqtt formats=v1
+tedge mqtt pub te/device/main///m/example '{
+  "time": "2020-10-15T05:30:47+00:00",
+  "temperature": 25,
+
+  "properties": {
+    "sensor": "DS18B20",
+    "has_alarm": false,
+    "samples": [ 25.1, 25.0, 24.9],
+    "range": {
+       "min": "-55°C",
+       "max": "+125°C"
+    }
+  }
+}'
+```
+
+These additional properties are not interpreted by %%te%% as measurement values and are passed unchanged to the target cloud.
+For instance, the example is translated into the following when forwarded to Cumulocity:
+
+```json
+{
+  "time":"2020-10-15T05:30:47Z",
+  "temperature":{"temperature":{"value":25.0}},
+  "sensor":"DS18B20",
+  "has_alarm":false,
+  "samples":[25.1,25.0,24.9],
+  "range":{"min":"-55°C","max":"+125°C"},
+  "type":"example"
+}
+```
+
 ## Events
 
 *Events* are notifications that something happened on the device, its environment, the domain application or the software system.
@@ -198,7 +236,7 @@ For instance:
 - free disk space going critically low
 
 ```sh te2mqtt formats=v1
-tedge mqtt pub te/device/main///a/temperature_high '{
+tedge mqtt pub -r -q 2 te/device/main///a/temperature_high '{
   "text": "Temperature is very high",
   "severity": "warning",
   "time": "2021-01-01T05:30:45+00:00",
@@ -218,3 +256,10 @@ tedge mqtt pub te/device/main///a/temperature_high '{
 | `timestamp`  | Optional time that indicates when the alarm has occurred, in ISO 8601 string format or as a unix timestamp (in seconds); when not provided, %%te%% uses the current system time                  |
 | `*`          | Additional fields are handled as custom specific information; if the connected cloud supports custom fragments its mapper transfers those accordingly to the cloud |
 
+### Clearing an alarm
+
+An alarm can be cleared by sending an empty retained message to the relevant alarm topic.
+
+```sh te2mqtt formats=v1
+tedge mqtt pub -r -q2 te/device/main///a/temperature_high ''
+```
