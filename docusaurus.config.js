@@ -115,7 +115,7 @@ const config = {
           beforeDefaultRemarkPlugins: [
             [
               remarkCmdRun,
-              { showErrors: false, strict: false, logErrors: false },
+              { showErrors: false, strict: false, logErrors: true },
             ],
           ],
           remarkPlugins: [

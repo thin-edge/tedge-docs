@@ -90,6 +90,7 @@ const plugin = (options) => {
         if (options.logErrors) {
           console.warn('Failed to run command', {
             meta,
+            file: vfile.path,
             error: `${error}`,
           });
         }
