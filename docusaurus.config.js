@@ -212,9 +212,9 @@ const config = {
         },
       },
       announcementBar: {
-        id: 'official-1.0.0-release',
+        id: 'official-1.7.0-release',
         content:
-          'thin-edge.io has reached 1.0.0 🚀 Install thin-edge.io for production grade device management on your edge device',
+          'thin-edge.io has reached 1.7.0 🚀 Install thin-edge.io for production grade device management on your edge device',
       },
       // Replace with your project's social card
       navbar: {
