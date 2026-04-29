@@ -1,0 +1,29 @@
+set dotenv-load
+
+# Setup tooling
+setup:
+    just init-env
+    just venv
+
+# Init. the dotenv file with some default values
+init-env:
+    [ ! -f .env ] && echo "DEMO_DEVICE=tedge_6c6687b0\nREAL_DEVICE=rpi4-d83add90fe56" > .env
+
+# Install python virtual environment
+venv:
+    [ -d .venv ] || python3 -m venv .venv
+    .venv/bin/pip3 install -r requirements.txt
+    .venv/bin/playwright install
+
+
+# Take all screenshots
+take-screenshots *ARGS:
+    .venv/bin/pytest {{ARGS}}
+
+# Take screenshots for the tests/tasks matching the expression
+take-screenshots-for expression *ARGS:
+    .venv/bin/pytest --headed -k {{expression}} {{ARGS}}
+
+# Start debug mode for the tests/tasks matching the expression
+debug expression *ARGS:
+    PWDEBUG=1 .venv/bin/pytest --headed -s -k {{expression}} {{ARGS}}
