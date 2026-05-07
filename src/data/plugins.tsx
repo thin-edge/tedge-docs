@@ -4,7 +4,7 @@ const TAGS = {
   BOOTSTRAP: 'Bootstrap',
   CONFIG: 'Configuration',
   CONTAINER: 'Container',
-  CUMULOCITY: 'Cumulocity IoT',
+  CUMULOCITY: 'Cumulocity',
   EXAMPLE: 'Example',
   IMAGE: 'Image',
   INIT_SYSTEM: 'Init Systems',
@@ -161,7 +161,7 @@ const PluginsList: IPlugin[] = [
     packageUrl:
       'https://github.com/thin-edge/thin-edge.io_examples/tree/main/opcua-solution',
     description:
-      'OPC UA Gateway example which uses the Cumulocity IoT [opcua-device-gateway](https://github.com/thin-edge/opcua-device-gateway-container) to connect to OPC UA Servers and thin-edge.io',
+      'OPC UA Gateway example which uses the Cumulocity [opcua-device-gateway](https://github.com/thin-edge/opcua-device-gateway-container) to connect to OPC UA Servers and thin-edge.io',
     tags: [TAGS.PROTOCOLS, TAGS.EXAMPLE],
   },
 
@@ -210,7 +210,7 @@ const PluginsList: IPlugin[] = [
   {
     name: 'c8y-tedge',
     description:
-      '[go-c8y-cli](https://goc8ycli.netlify.app/) extension to provide common utilities to help with bootstrapping thin-edge.io devices to Cumulocity IoT',
+      '[go-c8y-cli](https://goc8ycli.netlify.app/) extension to provide common utilities to help with bootstrapping thin-edge.io devices to Cumulocity',
     sourceUrl: 'https://github.com/thin-edge/c8y-tedge',
     packageUrl: 'https://github.com/thin-edge/c8y-tedge',
     tags: [TAGS.TOOL, TAGS.BOOTSTRAP],
@@ -248,7 +248,7 @@ const PluginsList: IPlugin[] = [
   {
     name: 'cumulocity-remote-access-cloud-http-proxy',
     description:
-      'A Cumulocity IoT microservice that allows to proxy HTTP requests through the cloud to an HTTP server running on a Cumulocity IoT connected device',
+      'A Cumulocity microservice that allows to proxy HTTP requests through the cloud to an HTTP server running on a Cumulocity connected device',
     sourceUrl:
       'https://github.com/Cumulocity-IoT/cumulocity-remote-access-cloud-http-proxy',
     packageUrl:

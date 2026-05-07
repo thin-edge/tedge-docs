@@ -15,7 +15,7 @@ function UserContextForm(props={}) {
   const [deviceId, setDeviceId] = useLocalStorage('DEVICE_ID', props.deviceId || generateName('tedge_'));
   useEffect(() => setDeviceId(deviceId), [deviceId]);
 
-  // Cumulocity IoT
+  // Cumulocity
   const [c8yUrl, setC8yUrl] = useLocalStorage('C8Y_URL', props.c8yUrl || 'example.eu-latest.com');
   useEffect(() => updateUrl(c8yUrl), [c8yUrl]);
   const updateUrl = (url) => {
@@ -74,7 +74,7 @@ function UserContextForm(props={}) {
 
             <div className="row margin--xs" style={showStyle('C8Y_URL')}>
               <div className="col col--4">
-                <label htmlFor="c8y-url">Cumulocity IoT URL</label>
+                <label htmlFor="c8y-url">Cumulocity URL</label>
               </div>
               <div className="col col--6">
                 <input id="c8y-url" inputMode="text" value={c8yUrl} onChange={(e) => updateUrl(e.target.value)}></input>
@@ -83,7 +83,7 @@ function UserContextForm(props={}) {
 
             <div className="row margin--xs" style={showStyle('C8Y_USER')}>
               <div className="col col--4">
-                <label htmlFor="c8y-user">Cumulocity IoT User</label>
+                <label htmlFor="c8y-user">Cumulocity User</label>
               </div>
               <div className="col col--6">
               <input id="c8y-user" inputMode="text" value={c8yUser} onChange={(e) => setC8yUser(e.target.value)}></input>
@@ -101,7 +101,7 @@ function UserContextForm(props={}) {
 
             <div className="row margin--xs" style={showStyle('C8Y_PROFILE_URL')}>
               <div className="col col--4">
-                <label htmlFor="c8y-profile-url">Second Cumulocity IoT URL</label>
+                <label htmlFor="c8y-profile-url">Second Cumulocity URL</label>
               </div>
               <div className="col col--6">
               <input id="c8y-profile-url" inputMode="text" value={c8yProfileUrl} onChange={(e) => setC8yProfileUrl(e.target.value)}></input>

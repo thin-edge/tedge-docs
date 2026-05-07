@@ -7,7 +7,7 @@ export default function UserContext(props={}) {
   // Common
   const deviceId = useReadLocalStorage('DEVICE_ID', props.deviceId || 'tedge001');
 
-  // Cumulocity IoT
+  // Cumulocity
   const c8yUrl = useReadLocalStorage('C8Y_URL', props.c8yUrl || 'example.eu-latest.com');
   const c8yUser = useReadLocalStorage('C8Y_USER', props.c8yUser || 'jimmy@thin-edge.com');
   const c8yProfileName = useReadLocalStorage('C8Y_PROFILE_NAME', props.c8yProfileName || 'second');
