@@ -21,3 +21,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /blog
+
+# dotenv files
+.env
+
+# python
+.venv
+*.pyc
+__pycache__/
+
