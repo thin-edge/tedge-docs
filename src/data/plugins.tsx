@@ -109,8 +109,9 @@ const PluginsList: IPlugin[] = [
   // Operations
   {
     name: 'c8y-command-plugin',
-    sourceUrl: 'https://github.com/thin-edge/c8y-command-plugin',
-    description: 'Execute shell commands via MQTT',
+    sourceUrl: 'https://github.com/thin-edge/tedge-command-plugin',
+    description:
+      'Execute shell commands via MQTT. Note: Deprecated. thin-edge.io 2.1.0 and later support the c8y_Command operation natively, so this plugin is no longer required.',
     tags: [TAGS.OPERATION, TAGS.CUMULOCITY],
   },
   {
